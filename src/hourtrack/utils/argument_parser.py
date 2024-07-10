@@ -25,26 +25,30 @@ def parse_arguments():
     """
     parser = argparse.ArgumentParser(description="Track time spent on projects.")
 
+    # Add subparsers for different commands
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Start command
+    # Start command, with a required project argument
     start_parser = subparsers.add_parser(
         "start", help="Start tracking time for a project"
     )
     start_parser.add_argument(
-        "project", help="The name of the project to start tracking"
+        "project", help="The name of the project to start tracking", required=True
     )
 
-    # Stop command
+    # Stop command, with a required project argument
     stop_parser = subparsers.add_parser("stop", help="Stop tracking time for a project")
-    stop_parser.add_argument("project", help="The name of the project to stop tracking")
+    stop_parser.add_argument(
+        "project", help="The name of the project to stop tracking", required=True
+    )
 
-    # List command
+    # List command, with a required list_type argument
     list_parser = subparsers.add_parser("list", help="List projects")
     list_parser.add_argument(
         "list_type",
         choices=["all", "active"],
         help="List all projects or only active ones",
+        required=True,
     )
     list_parser.add_argument(
         "--format",
@@ -56,7 +60,7 @@ def parse_arguments():
     # Status command
     status_parser = subparsers.add_parser("status", help="Show status of a project")
     status_parser.add_argument(
-        "project", help="The name of the project to show status for"
+        "project", help="The name of the project to show status for", required=True
     )
     status_parser.add_argument(
         "--format",
@@ -65,15 +69,19 @@ def parse_arguments():
         help="Output format",
     )
 
-    # Reset command
+    # Reset command, with a required project argument
     reset_parser = subparsers.add_parser("reset", help="Reset timer for a project")
-    reset_parser.add_argument("project", help="The name of the project to reset")
+    reset_parser.add_argument(
+        "project", help="The name of the project to reset", required=True
+    )
 
-    # Delete command
+    # Delete command, with a required project argument
     delete_parser = subparsers.add_parser("delete", help="Delete a project")
-    delete_parser.add_argument("project", help="The name of the project to delete")
+    delete_parser.add_argument(
+        "project", help="The name of the project to delete", required=True
+    )
 
-    # Output command
+    # Output command, with a required project argument
     output_parser = subparsers.add_parser("output", help="Output project data to file")
     output_parser.add_argument(
         "project", help="The name of the project to output data for"
@@ -90,4 +98,4 @@ def parse_arguments():
 
 if __name__ == "__main__":
     args = parse_arguments()
-    print(args)  # For testing purposes, to see the parsed arguments
+    print(args)  # Show the parsed arguments
