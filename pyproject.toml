@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hourtrack"
+version = "0.0.1"
+description = "Python program that tracks total time spent on projects and saves sessions. It supports multiple projects."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Rodrigo Martin Núñez", email = "rodrigomartinnunez@gmail.com" }
+]
+maintainers = [
+    { name = "Rodrigo Martin Núñez", email = "rodrigomartinnunez@gmail.com" }
+]
+license = { file = "LICENSE" }
+keywords = ["hourtrack", "time", "track", "projects", "sessions", "hours", "minutes", "seconds", "time tracking", "project tracking", "session tracking", "time management", "project management", "session management"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "colorlog==6.8.2",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/P-ict0/HourTrack.git"
+"Bug Reports" = "https://github.com/P-ict0/HourTrack/issues"
+
+[project.scripts]
+dynamic-scraper = "src.hourtrack:main"
+
+[tool.setuptools]
+packages = ["src.hourtrack", "src.hourtrack.utils"]

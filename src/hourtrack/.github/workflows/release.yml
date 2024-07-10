@@ -1,0 +1,45 @@
+name: Release Workflow 📦
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'pyproject.toml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+
+    - name: Get version
+      id: get_version
+      run: |
+        echo "VERSION=v$(cat pyproject.toml | grep 'version = ' | sed 's/version = //g' | sed 's/"//g')" >> $GITHUB_ENV
+
+    - name: Get latest commit message
+      id: get-commit-message
+      run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      with:
+        tag_name: ${{ env.VERSION }}
+        release_name: Release ${{ env.VERSION }}
+        body: ${{ env.COMMIT_MESSAGE }}
+        draft: false
+        prerelease: false
