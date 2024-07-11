@@ -30,7 +30,7 @@ class HourTrack:
 
     def check_args(self):
         if (
-            self.args.command == "status"
+            self.args.command == "info"
             and hasattr(self.args, "output")
             and not hasattr(self.args, "project")
         ):
@@ -46,6 +46,7 @@ class HourTrack:
         # If the project name is not provided, use None
         project = getattr(self.args, "project", None)
         format = getattr(self.args, "format", "smart")
+        apply_all = getattr(self.args, "all", False)
 
         project_manager = ProjectManager(project, DATA_FILE, format)
 
@@ -53,13 +54,13 @@ class HourTrack:
             project_manager.start_project()
 
         elif self.args.command == "stop":
-            project_manager.stop_project()
+            project_manager.stop_project(apply_all)
 
         elif self.args.command == "reset":
-            project_manager.reset_project()
+            project_manager.reset_project(apply_all)
 
         elif self.args.command == "delete":
-            project_manager.delete_project()
+            project_manager.delete_project(apply_all)
 
         elif self.args.command == "list":
             if self.args.list_type == "all":
@@ -67,9 +68,9 @@ class HourTrack:
             elif self.args.list_type == "active":
                 project_manager.list_active_projects()
 
-        elif self.args.command == "status":
-            output = getattr(self.args, "output", None)
-            project_manager.project_status(output)
+        elif self.args.command == "info":
+            output = getattr(self.args, "info", None)
+            project_manager.project_status(output, apply_all)
 
 
 def run():

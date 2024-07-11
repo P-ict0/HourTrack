@@ -86,23 +86,23 @@ hourtrack start <project>
 ```
 
 **Stop tracking**:
-Stop current session for a project, saving the time spent.
+Stop current session for a project, saving the time spent. With option to delete all projects.
 ```bash
-hourtrack stop <project>
+hourtrack stop <project> [--all]
 ```
 
 **Reset project**:
-Reset a project's data.
+Reset a project's data. With option to reset all projects
 
 ```bash
-hourtrack reset <project>
+hourtrack reset <project> [--all]
 ```
 
 **Delete project**:
-Delete a project and all its data.
+Delete a project and all its data. With option to delete all projects.
 
 ```bash
-hourtrack delete <project>
+hourtrack delete <project> [--all]
 ```
 
 **List projects**:
@@ -112,13 +112,13 @@ List all/active projects.
 hourtrack list <all|active> [--format <smart|full|short|hours>]
 ```
 
-**Project Status**:
+**Project Info**:
 Show the status of a specific project or show current active session. With option to output to a file.
 ```bash
 # Project status
-hourtrack status <project> [--format <smart|full|short|hours>] [-o <outputPath>]
+hourtrack info <project> [--format <smart|full|short|hours>] [-o <outputPath>]
 # Active session
-hourtrack status [--format <smart|full|short|hours>]
+hourtrack info [--format <smart|full|short|hours>]
 ```
 
 # ⚙ Options
@@ -127,11 +127,11 @@ hourtrack status [--format <smart|full|short|hours>]
 |-------------------------|--------------------------------------|---------|---------------------------------------------------------------------------------------------------------|
 | `hourtrack --help`      | None                                 | None    | For help                                                                                                |
 | `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
-| `hourtrack stop <project>`  | Project name                       | None    | Stop current session for a project, saving the time spent.                                              |
-| `hourtrack reset <project>` | Project name                       | None    | Reset a project's data.                                                                                 |
-| `hourtrack delete <project>`| Project name                       | None    | Delete a project and all its data.                                                                      |
-| `hourtrack list <all\|active> [--format <smart\|full\|short\|hours>]` | list `all`, format `smart` | List all/active projects.                                                                               |
-| `hourtrack status [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | None | None | Show the status of a specific project or show current active session if project is not specified. With option to output to a file.   |
+| `hourtrack stop <project> [--all]`  | Project name                       | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                              |
+| `hourtrack reset <project> [--all]` | Project name                       | None    | Reset a project's data. With option to reset all projects                                                                               |
+| `hourtrack delete <project> [--all]`| Project name                       | None    | Delete a project and all its data. With option to delete all projects                                                                     |
+| `hourtrack list <all\|active> [--format <smart\|full\|short\|hours>]` | format `smart` | List all/active projects.                                                                               |
+| `hourtrack info [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | None | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
 
 # 💻 Development
 

@@ -39,7 +39,12 @@ def parse_arguments():
 
     # Stop command, with a required project argument
     stop_parser = subparsers.add_parser("stop", help="Stop tracking time for a project")
-    stop_parser.add_argument("project", help="The name of the project to stop tracking")
+    stop_parser.add_argument(
+        "project", help="The name of the project to stop tracking", nargs="?"
+    )
+    stop_parser.add_argument(
+        "-a", "--all", action="store_true", help="Stop all projects"
+    )
 
     # List command, with a required list_type argument
     list_parser = subparsers.add_parser("list", help="List projects")
@@ -55,8 +60,8 @@ def parse_arguments():
         help="Output format",
     )
 
-    # Status command
-    status_parser = subparsers.add_parser("status", help="Show status of a project")
+    # Info command
+    status_parser = subparsers.add_parser("info", help="Show status of a project")
     status_parser.add_argument(
         "project",
         help="The name of the project to show status for",
@@ -68,7 +73,6 @@ def parse_arguments():
         type=str,
         help="Output destination",
     )
-
     status_parser.add_argument(
         "--format",
         choices=["smart", "full", "short", "hours"],
@@ -78,11 +82,21 @@ def parse_arguments():
 
     # Reset command, with a required project argument
     reset_parser = subparsers.add_parser("reset", help="Reset timer for a project")
-    reset_parser.add_argument("project", help="The name of the project to reset")
+    reset_parser.add_argument(
+        "project", help="The name of the project to reset", nargs="?"
+    )
+    reset_parser.add_argument(
+        "-a", "--all", action="store_true", help="Reset all projects"
+    )
 
     # Delete command, with a required project argument
     delete_parser = subparsers.add_parser("delete", help="Delete a project")
-    delete_parser.add_argument("project", help="The name of the project to delete")
+    delete_parser.add_argument(
+        "project", help="The name of the project to delete", nargs="?"
+    )
+    delete_parser.add_argument(
+        "-a", "--all", action="store_true", help="Delete all projects"
+    )
 
     # Version command
     parser.add_argument(
