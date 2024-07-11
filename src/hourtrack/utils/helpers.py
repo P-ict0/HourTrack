@@ -1,4 +1,5 @@
 import platform
+from datetime import datetime
 
 
 #########################################################################
@@ -23,7 +24,7 @@ def ask_yes_no(question: str) -> bool:
     :param question: The question to ask
     :return: True if the user answers yes, False otherwise
     """
-    answer = input(f"{question} (y/n, default is y): ").strip().lower()
+    answer = input(f"{question} [Y]es/[n]o: ").strip().lower()
     if answer in ["y", "yes", ""]:
         return True
     elif answer in ["n", "no"]:
@@ -158,3 +159,22 @@ def format_time(seconds: int, mode: str) -> str:
         return format_hours()
     else:
         raise ValueError(f"Invalid format mode: {mode}")
+
+
+def format_timestamp(timestamp: str) -> str:
+    """
+    Format the given timestamp to a human-readable format.
+
+    Parameters:
+    timestamp (str): The timestamp to format.
+
+    Returns:
+    str: The formatted timestamp.
+    """
+    # Parse the timestamp to a datetime object
+    dt = datetime.fromisoformat(timestamp)
+
+    # Format the datetime object to a human-readable string
+    human_readable = dt.strftime("%Y-%m-%d %H:%M:%S")
+
+    return human_readable

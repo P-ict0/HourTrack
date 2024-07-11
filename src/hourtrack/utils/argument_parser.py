@@ -1,5 +1,6 @@
 import argparse
-from importlib.metadata import version
+
+# from importlib.metadata import version
 
 
 def parse_arguments():
@@ -26,21 +27,19 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Track time spent on projects.")
 
     # Add subparsers for different commands
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers = parser.add_subparsers(dest="command")
 
     # Start command, with a required project argument
     start_parser = subparsers.add_parser(
         "start", help="Start tracking time for a project"
     )
     start_parser.add_argument(
-        "project", help="The name of the project to start tracking", required=True
+        "project", help="The name of the project to start tracking"
     )
 
     # Stop command, with a required project argument
     stop_parser = subparsers.add_parser("stop", help="Stop tracking time for a project")
-    stop_parser.add_argument(
-        "project", help="The name of the project to stop tracking", required=True
-    )
+    stop_parser.add_argument("project", help="The name of the project to stop tracking")
 
     # List command, with a required list_type argument
     list_parser = subparsers.add_parser("list", help="List projects")
@@ -48,7 +47,6 @@ def parse_arguments():
         "list_type",
         choices=["all", "active"],
         help="List all projects or only active ones",
-        required=True,
     )
     list_parser.add_argument(
         "--format",
@@ -62,6 +60,7 @@ def parse_arguments():
     status_parser.add_argument(
         "project",
         help="The name of the project to show status for",
+        nargs="?",
     )
     status_parser.add_argument(
         "-o",
@@ -79,15 +78,16 @@ def parse_arguments():
 
     # Reset command, with a required project argument
     reset_parser = subparsers.add_parser("reset", help="Reset timer for a project")
-    reset_parser.add_argument(
-        "project", help="The name of the project to reset", required=True
-    )
+    reset_parser.add_argument("project", help="The name of the project to reset")
 
     # Delete command, with a required project argument
     delete_parser = subparsers.add_parser("delete", help="Delete a project")
-    delete_parser.add_argument(
-        "project", help="The name of the project to delete", required=True
-    )
+    delete_parser.add_argument("project", help="The name of the project to delete")
+
+    # # Version command
+    # parser.add_argument(
+    #     "-V", "--version", action="version", version=version("hourtrack")
+    # )
 
     return parser.parse_args()
 

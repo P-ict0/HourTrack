@@ -1,8 +1,16 @@
-from .utils.argument_parser import parse_arguments
-from .utils.config import DATA_FILE
-from .utils.project_manager import ProjectManager
-from .utils.logger import Logger
-from .utils.project_manager import ProjectManager
+import path
+import sys
+
+# directory reach
+directory = path.Path(__file__)
+
+# setting path
+sys.path.append(directory.parent)
+
+from utils.argument_parser import parse_arguments
+from utils.config import DATA_FILE
+from utils.project_manager import ProjectManager
+from utils.project_manager import ProjectManager
 import sys
 
 
@@ -37,10 +45,9 @@ class HourTrack:
         """
         # If the project name is not provided, use None
         project = getattr(self.args, "project", None)
+        format = getattr(self.args, "format", "smart")
 
-        project_manager = ProjectManager(
-            project, DATA_FILE, self.args.format, self.logger
-        )
+        project_manager = ProjectManager(project, DATA_FILE, format)
 
         if self.args.command == "start":
             project_manager.start_project()
