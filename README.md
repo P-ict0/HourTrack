@@ -19,7 +19,6 @@
 - [🚀 Quick start](#-quick-start)
 - [✨ Features](#-features)
 - [📦 Installation](#-installation)
-  - [Optional installation](#optional-installation)
 - [📲 Usage](#-usage)
 - [⚙ Options](#-options)
 - [💻 Development](#-development)
@@ -65,7 +64,7 @@ pipx install hourtrack
 ```
 _`pipx` is optional but recommended, you can use `pip` instead._
 
-## Optional installation
+**Optional installation alternative**
 
 ```bash
 git clone https://github.com/P-ict0/HourTrack.git
