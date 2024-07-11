@@ -1,6 +1,6 @@
 import argparse
 
-# from importlib.metadata import version
+from importlib.metadata import version
 
 
 def parse_arguments():
@@ -84,10 +84,10 @@ def parse_arguments():
     delete_parser = subparsers.add_parser("delete", help="Delete a project")
     delete_parser.add_argument("project", help="The name of the project to delete")
 
-    # # Version command
-    # parser.add_argument(
-    #     "-V", "--version", action="version", version=version("hourtrack")
-    # )
+    # Version command
+    parser.add_argument(
+        "-V", "--version", action="version", version=version("hourtrack")
+    )
 
     return parser.parse_args()
 
