@@ -61,8 +61,16 @@ def parse_arguments():
     # Status command
     status_parser = subparsers.add_parser("status", help="Show status of a project")
     status_parser.add_argument(
-        "project", help="The name of the project to show status for", required=True
+        "project",
+        help="The name of the project to show status for",
     )
+    status_parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        help="Output destination",
+    )
+
     status_parser.add_argument(
         "--format",
         choices=["smart", "full", "short", "hours"],
@@ -80,26 +88,6 @@ def parse_arguments():
     delete_parser = subparsers.add_parser("delete", help="Delete a project")
     delete_parser.add_argument(
         "project", help="The name of the project to delete", required=True
-    )
-
-    # Output command, with a required project argument
-    output_parser = subparsers.add_parser("output", help="Output project data to file")
-    output_parser.add_argument(
-        "project", help="The name of the project to output data for"
-    )
-    output_parser.add_argument(
-        "--format",
-        choices=["smart", "full", "short", "hours"],
-        default="smart",
-        help="Output format",
-    )
-
-    parser.add_argument(
-        "--version",
-        "-V",
-        help="Get program version",
-        action="version",
-        version=version("hourtrack"),
     )
 
     return parser.parse_args()

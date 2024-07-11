@@ -1,2 +1,171 @@
-# HourTracker
- Python program that tracks time spent on projects
+<div align = center>
+  
+# ⌛ HourTrack
+
+<br>
+
+![Badge Workflow] 
+[![Badge License]][License] 
+![Badge Language] 
+[![Badge Pull Requests]][Pull Requests] 
+[![Badge Issues]][Issues] 
+
+<br>
+
+</div>
+
+# Contents
+- [📖 Description](#-description)
+- [🚀 Quick start](#-quick-start)
+- [✨ Features](#-features)
+- [📦 Installation](#-installation)
+- [📲 Usage](#-usage)
+- [⚙ Options](#-options)
+- [💻 Development](#-development)
+- [👥 Contributing](#-contributing)
+<!----------------------------------------------------------------------------->
+
+# 📖 Description
+
+💻 **Windows, Linux and Mac compatible.** 💻
+
+A Python script to track time spent on various projects. This script allows you to start, stop, and monitor time tracking for different projects, as well as output data to files.
+
+It is very lightweight since it doesnt have to be running in the background.
+
+This script is going to help you track:
+- Total time spent on different projects
+- Work sessions information
+- Time spent on each session
+
+# 🚀 Quick start
+
+```bash
+pipx install hourtrack
+hourtrack start myProject
+```
+
+# ✨ Features
+
+- **Supports multiple projects**: Track time for multiple projects.
+- **Start/Stop tracking**: Start and stop tracking time for a project.
+- **List projects**: List all projects being tracked.
+- **Delete project**: Delete a project and all its data.
+- **Reset project**: Reset a project's data.
+- **Export data**: Export data to a `.txt` file.
+- ...
+
+# 📦 Installation
+
+From [PyPI][PyPiLink]
+
+```bash
+pipx install hourtrack
+```
+_`pipx` is optional but recommended, you can use `pip` instead._
+
+**Optional installation alternative**
+
+```bash
+git clone https://github.com/P-ict0/HourTrack.git
+cd HourTrack
+pipx install .  # You can also use `pip`
+```
+
+# 📲 Usage
+
+For help:
+```bash
+hourtrack --help
+```
+
+**Start tracking**:
+Start tracking session for a project. If the project does not exist, it will be created.
+```bash
+hourtrack start <project>
+```
+
+**Stop tracking**:
+Stop current session for a project, saving the time spent.
+```bash
+hourtrack stop <project>
+```
+
+**Reset project**:
+Reset a project's data.
+
+```bash
+hourtrack reset <project>
+```
+
+**Delete project**:
+Delete a project and all its data.
+
+```bash
+hourtrack delete <project>
+```
+
+**List projects**:
+List all/active projects.
+
+```bash
+hourtrack list <all|active> [--format <smart|full|short|hours>]
+```
+
+**Project Status**:
+Show the status of a specific project or show current active session. With option to output to a file.
+```bash
+# Project status
+hourtrack status <project> [--format <smart|full|short|hours>] [-o <outputPath>]
+# Active session
+hourtrack status [--format <smart|full|short|hours>]
+```
+
+# ⚙ Options
+
+| Command                 | Requirement                          | Default | Description                                                                                             |
+|-------------------------|--------------------------------------|---------|---------------------------------------------------------------------------------------------------------|
+| `hourtrack --help`      | None                                 | None    | For help                                                                                                |
+| `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
+| `hourtrack stop <project>`  | Project name                       | None    | Stop current session for a project, saving the time spent.                                              |
+| `hourtrack reset <project>` | Project name                       | None    | Reset a project's data.                                                                                 |
+| `hourtrack delete <project>`| Project name                       | None    | Delete a project and all its data.                                                                      |
+| `hourtrack list <all\|active> [--format <smart\|full\|short\|hours>]` | list `all`, format `smart` | List all/active projects.                                                                               |
+| `hourtrack status [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | None | None | Show the status of a specific project or show current active session if project is not specified. With option to output to a file.   |
+
+# 💻 Development
+
+```bash
+git clone https://github.com/P-ict0/HourTrack.git
+cd HourTrack
+python -m venv venv
+source venv/bin/activate # Windows: .\venv\Scripts\activate.ps1
+
+# Run the script
+python src/hourtrack.py --help
+```
+
+# 👥 Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your suggested changes.
+
+<!----------------------------------------------------------------------------->
+
+[Stars]: https://starchart.cc/P-ict0/HourTrack
+[DWS]: https://github.com/P-ict0/HourTrack
+
+[Pull Requests]: https://github.com/P-ict0/HourTrack/pulls
+[Issues]: https://github.com/P-ict0/HourTrack/issues
+[PyPiLink]: https://pypi.org/project/hourtrack/
+
+[License]: LICENSE
+
+<!----------------------------------{ Badges }--------------------------------->
+
+[Badge Workflow]: https://github.com/P-ict0/HourTrack/actions/workflows/release.yml/badge.svg
+
+[Badge Issues]: https://img.shields.io/github/issues/P-ict0/HourTrack
+[Badge Pull Requests]: https://img.shields.io/github/issues-pr/P-ict0/HourTrack
+[Badge Language]: https://img.shields.io/github/languages/top/P-ict0/HourTrack
+[Badge License]: https://img.shields.io/github/license/P-ict0/HourTrack
+[Badge Lines]: https://img.shields.io/tokei/lines/github/P-ict0/HourTrack
