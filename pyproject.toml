@@ -25,14 +25,16 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
 ]
-dependencies = []
+dependencies = [
+    "path==16.14.0"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/P-ict0/HourTrack.git"
 "Bug Reports" = "https://github.com/P-ict0/HourTrack/issues"
 
 [project.scripts]
-dynamic-scraper = "src.hourtrack:main"
+hourtrack = "src.hourtrack:main"
 
 [tool.setuptools]
 packages = ["src.hourtrack", "src.hourtrack.utils"]
