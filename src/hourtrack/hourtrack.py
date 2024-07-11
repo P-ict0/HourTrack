@@ -2,6 +2,8 @@ from .utils.argument_parser import parse_arguments
 from .utils.config import DATA_FILE
 from .utils.project_manager import ProjectManager
 from .utils.logger import Logger
+from .utils.project_manager import ProjectManager
+import sys
 
 
 class HourTrack:
@@ -30,28 +32,30 @@ class HourTrack:
             project, DATA_FILE, self.args.format, self.logger
         )
 
-        if args.command == "start":
-            handle_start(args.project)
+        if self.args.command == "start":
+            project_manager.start_project()
 
-        elif args.command == "stop":
-            handle_stop(args.project)
+        elif self.args.command == "stop":
 
-        elif args.command == "list":
-            if args.list_type == "all":
-                handle_list_all(args.format)
-            elif args.list_type == "active":
-                handle_list_active(args.format)
+            project_manager.stop_project()
 
-        elif args.command == "status":
-            handle_status(args.project, args.format)
+        elif self.args.command == "list":
+            if self.args.list_type == "all":
+                project_manager.list_all_projects()
+            elif self.args.list_type == "active":
+                project_manager.list_active_projects()
 
-        elif args.command == "reset":
+        elif self.args.command == "status":
+            output = getattr(self.args, "output", None)
+            project_manager.project_status(output)
+
+        elif self.args.command == "reset":
             handle_reset(args.project)
 
-        elif args.command == "delete":
+        elif self.args.command == "delete":
             handle_delete(args.project)
 
-        elif args.command == "output":
+        elif self.args.command == "output":
             handle_output(args.project, args.format)
 
 
