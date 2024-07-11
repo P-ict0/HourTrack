@@ -1,4 +1,5 @@
 import argparse
+from importlib.metadata import version
 
 
 def parse_arguments():
@@ -91,6 +92,14 @@ def parse_arguments():
         choices=["smart", "full", "short", "hours"],
         default="smart",
         help="Output format",
+    )
+
+    parser.add_argument(
+        "--version",
+        "-V",
+        help="Get program version",
+        action="version",
+        version=version("hourtrack"),
     )
 
     return parser.parse_args()

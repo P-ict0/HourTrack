@@ -25,9 +25,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
 ]
-dependencies = [
-    "colorlog==6.8.2",
-]
+dependencies = []
 
 [project.urls]
 "Homepage" = "https://github.com/P-ict0/HourTrack.git"
