@@ -15,8 +15,6 @@
 </div>
 
 # Contents
-- [⌛ HourTrack](#-hourtrack)
-- [Contents](#contents)
 - [📖 Description](#-description)
 - [🚀 Quick start](#-quick-start)
 - [✨ Features](#-features)
