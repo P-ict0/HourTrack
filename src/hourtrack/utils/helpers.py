@@ -1,4 +1,4 @@
-import os
+import platform
 
 
 #########################################################################
@@ -10,7 +10,7 @@ def is_windows() -> bool:
 
     :return: True if the OS is Windows, False otherwise
     """
-    return True if os.name == "nt" else False
+    return True if platform.system() == "Windows" else False
 
 
 #########################################################################
