@@ -4,6 +4,7 @@ from datetime import datetime
 from .helpers import ask_yes_no
 from .helpers import format_time
 from typing import Optional
+import sys
 
 
 class ProjectManager:
@@ -47,7 +48,7 @@ class ProjectManager:
         :param logger: The logger to use
         """
         self.data_file = data_file  # path to the JSON file storing data
-        self.project = project  # name of the project
+        self.project = project  # name of the project or None
         self.format_mode = format_mode
         self.logger = logger
         self.init_file()  # initialize the JSON file
@@ -81,15 +82,23 @@ class ProjectManager:
         with open(self.data_file, "w") as f:
             json.dump(data, f, indent=4)
 
+    def exit_if_no_project(self) -> None:
+        if not self.project:
+            self.logger.error("Project name is required")
+            print("Project name is required for start command")
+            sys.exit(1)
+
     def start_project(self) -> None:
         """
         Start tracking the project, saving the start time
         """
+        self.exit_if_no_project()
         if self.project not in self.data["projects"]:
             # If the project does not exist, create it
             if self.ask_yes_no(
                 f"Project {self.project} does not exist. Create it? [Y]es/[n]o"
             ):
+                print(f"Creating project: {self.project}")
                 self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
 
         # Add a new session with the start time
@@ -100,6 +109,7 @@ class ProjectManager:
         print(f"Started tracking project: {self.project}")
 
     def stop_project(self) -> None:
+        self.exit_if_no_project()
         """
         Stop tracking the project, saving the end time and calculating the total time
         Also saves the session data to the JSON file
@@ -156,6 +166,7 @@ class ProjectManager:
                 print(f"  {project}: {time_formatted}")
 
     def reset_project(self) -> None:
+        self.exit_if_no_project()
         if self.project in self.data["projects"]:
             self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
             self.save_data(self.data)
@@ -164,6 +175,7 @@ class ProjectManager:
             self.logger.warning(f"Project {self.project} does not exist")
 
     def delete_project(self, project: str) -> None:
+        self.exit_if_no_project()
         if project in self.data["projects"]:
             del self.data["projects"][project]
             self.save_data(self.data)
@@ -171,20 +183,18 @@ class ProjectManager:
         else:
             print(f"Project {project} does not exist")
 
-    def project_status(
-        self, project: Optional[str], output_to_file: bool = False
-    ) -> None:
+    def project_status(self, output_to_file: Optional[str]) -> None:
         """
         Display the status of a project and optionally output it to a file
 
         :param project: The name of the project
-        :param output_to_file: Whether to output the status to a file
+        :param output_to_file: Path to the file to output the status to
         """
         # Check if a project was provided, if not, output status of current active session, if any
-        if project:
+        if self.project:
             # Check if the project exists
-            if project in self.data["projects"]:
-                details = self.data["projects"][project]
+            if self.project in self.data["projects"]:
+                details = self.data["projects"][self.project]
                 total_time = details["total_time"]
                 time_formatted = format_time(total_time, self.output_format)
                 num_sessions = len(details["sessions"])
@@ -200,8 +210,8 @@ class ProjectManager:
 
                 # Output the status to a file or to the console
                 if output_to_file:
-                    with open(f"{project}.txt", "w") as f:
-                        f.write(f"Project name: {project}\n")
+                    with open(f"{self.project}.txt", "w") as f:
+                        f.write(f"Project name: {self.project}\n")
                         f.write(f"Total time: {time_formatted}{active_warning}\n")
                         f.write(f"Number of sessions: {num_sessions}\n\n")
                         f.write("Sessions:\n")
@@ -220,9 +230,9 @@ class ProjectManager:
                             f.write(
                                 f"Start: {start}, End: {end}, Duration: {session_total_time}\n"
                             )
-                    print(f"Outputted project {project} to {project}.txt")
+                    print(f"Outputted project {self.project} to {self.project}.txt")
                 else:
-                    print(f"Status of project '{project}':")
+                    print(f"Status of project '{self.project}':")
                     print(f"Total time: {time_formatted}{active_warning}")
                     print(f"Number of sessions: {num_sessions}")
                     print("\nSessions:")
@@ -238,7 +248,7 @@ class ProjectManager:
                             f"Start: {start}, End: {end}, Duration: {session_total_time}"
                         )
             else:
-                print(f"Project '{project}' does not exist")
+                print(f"Project '{self.project}' does not exist")
         else:
             # Check if there are any active projects
             active_projects = [
