@@ -147,7 +147,7 @@ def format_time(seconds: int, mode: str) -> str:
             + minutes / 60
             + seconds / 3600
         )
-        return f"{int(total_hours)}"
+        return f"{int(total_hours)} hours"
 
     if mode == "full":
         return format_full()

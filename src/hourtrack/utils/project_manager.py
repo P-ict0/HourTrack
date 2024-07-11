@@ -274,7 +274,7 @@ class ProjectManager:
                     (datetime.now() - current_session_start).total_seconds()
                 )
                 total_time += current_session_time
-                active_warning = " (ACTIVE)"
+                active_warning = " (active)"
             else:
                 active_warning = ""
 
