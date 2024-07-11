@@ -306,6 +306,7 @@ class ProjectManager:
             all_status_output = ""
             for project, details in self.data["projects"].items():
                 all_status_output += output_project_status(project, details) + "\n"
+                all_status_output += "-" * 40 + "\n"
 
             if output_to_file:
                 with open(output_to_file, "w") as f:
