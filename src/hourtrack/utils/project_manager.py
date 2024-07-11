@@ -37,7 +37,7 @@ class ProjectManager:
     """
 
     def __init__(
-        self, project: Optional[str], data_file: str, format_mode: str, logger
+        self, project: Optional[str], data_file: str, format_mode: str
     ) -> None:
         """
         Initialize the ProjectManager
@@ -45,12 +45,10 @@ class ProjectManager:
         :param project: The name of the project
         :param data_file: The path to the JSON file storing data
         :param format_mode: The mode to use for formatting time, one of "smart", "full", "short", "hours"
-        :param logger: The logger to use
         """
         self.data_file = data_file  # path to the JSON file storing data
         self.project = project  # name of the project or None
         self.format_mode = format_mode
-        self.logger = logger
         self.init_file()  # initialize the JSON file
         self.data = self.load_data()  # pre-load the data from the JSON file
 
@@ -84,8 +82,7 @@ class ProjectManager:
 
     def exit_if_no_project(self) -> None:
         if not self.project:
-            self.logger.error("Project name is required")
-            print("Project name is required for start command")
+            print("Project name is required")
             sys.exit(1)
 
     def start_project(self) -> None:
@@ -133,15 +130,10 @@ class ProjectManager:
                 self.data["projects"][self.project]["total_time"] += session_total_time
 
                 self.save_data(self.data)
-                self.logger.info(f"Stopped tracking project {self.project}")
                 print(f"Stopped tracking project: {self.project}")
             else:
-                self.logger.info(
-                    f"Project {self.project} is not currently being tracked"
-                )
                 print(f"Project {self.project} is not currently being tracked")
         else:
-            self.logger.warning(f"Project {self.project} does not exist")
             print(f"Project {self.project} does not exist")
 
     def list_all_projects(self) -> None:
@@ -168,17 +160,19 @@ class ProjectManager:
     def reset_project(self) -> None:
         self.exit_if_no_project()
         if self.project in self.data["projects"]:
-            self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
-            self.save_data(self.data)
-            self.logger.info(f"Reset project {self.project}")
+            if ask_yes_no(f"Reset project {self.project}? [Y]es/[n]o"):
+                self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
+                self.save_data(self.data)
+                print(f"Reset project {self.project}")
         else:
-            self.logger.warning(f"Project {self.project} does not exist")
+            print(f"Project {self.project} does not exist")
 
     def delete_project(self, project: str) -> None:
         self.exit_if_no_project()
         if project in self.data["projects"]:
-            del self.data["projects"][project]
-            self.save_data(self.data)
+            if ask_yes_no(f"Delete project {project}? [Y]es/[n]o"):
+                del self.data["projects"][project]
+                self.save_data(self.data)
             print(f"Deleted project {project}")
         else:
             print(f"Project {project} does not exist")

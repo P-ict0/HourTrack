@@ -11,16 +11,15 @@ def parse_arguments():
     - stop <project>: Stop tracking time for a project
     - list all: List all projects (optionally with --format)
     - list active: List active projects (optionally with --format)
-    - status <project>: Show status of a project (optionally with --format)
+    - status [<project>]: Show status of a project or current session (optionally with --format and --output)
     - reset <project>: Reset timer for a project
     - delete <project>: Delete a project
-    - output <project>: Output project data to file (optionally with --format)
-
     Options:
     - --format: Output format for list, status, and output commands ("smart", "full", "short", "hours")
                     Default is "smart"
-
-
+    - --output: Output destination for status command
+    - -h, --help: Show help message
+    - -V, --version: Show version
 
     Returns: argparse.Namespace: The parsed arguments.
     """
