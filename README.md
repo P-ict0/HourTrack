@@ -139,6 +139,7 @@ hourtrack status [--format <smart|full|short|hours>]
 git clone https://github.com/P-ict0/HourTrack.git
 cd HourTrack
 python -m venv venv
+pip install -r requirements.txt
 source venv/bin/activate # Windows: .\venv\Scripts\activate.ps1
 
 # Run the script
