@@ -39,7 +39,7 @@ class HourTrack:
             )
             sys.exit(1)
 
-    def main(self):
+    def track(self):
         """
         Main function for the HourTrack application
         """
@@ -72,6 +72,6 @@ class HourTrack:
             project_manager.project_status(output)
 
 
-if __name__ == "__main__":
+def run():
     hourtrack = HourTrack()
-    hourtrack.main()
+    hourtrack.track()

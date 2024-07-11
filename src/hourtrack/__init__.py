@@ -1,6 +1,6 @@
-from .hourtrack import main
+from .hourtrack import run
 
 
 def main():
     """Entry point for the application script"""
-    main()
+    run()
