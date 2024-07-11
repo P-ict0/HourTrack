@@ -1,15 +1,14 @@
 import logging
-from colorlog import ColoredFormatter
 
 
 class Logger:
     """
-    A simple console logger class that outputs colorized logs.
+    A simple console logger class.
     """
 
     def __init__(self, name: str, verbosity_level: int = 0) -> None:
         """
-        Initialize a colorized console logger.
+        Initialize a console logger.
 
         Parameters:
         name (str): Name of the logger which is typically the name of the module creating the logger.
@@ -19,7 +18,7 @@ class Logger:
         self.logger = logging.getLogger(name)
         if verbosity_level == 1:
             self.logger.setLevel(logging.WARNING)
-        if verbosity_level == 2:
+        elif verbosity_level == 2:
             self.logger.setLevel(logging.INFO)
         elif verbosity_level >= 3:
             self.logger.setLevel(logging.DEBUG)
@@ -30,21 +29,8 @@ class Logger:
         ch = logging.StreamHandler()
         ch.setLevel(logging.DEBUG)
 
-        # Create colored formatter
-        formatter = ColoredFormatter(
-            "%(log_color)s%(asctime)s => [%(levelname)s]%(reset)s %(white)s%(message)s",
-            datefmt="%H:%M:%S",
-            reset=True,
-            log_colors={
-                "DEBUG": "cyan",
-                "INFO": "green",
-                "WARNING": "yellow",
-                "ERROR": "red",
-                "CRITICAL": "red,bg_white",
-            },
-            secondary_log_colors={},
-            style="%",
-        )
+        # Create formatter
+        formatter = logging.Formatter("[%(levelname)s] %(message)s", datefmt="%H:%M:%S")
 
         # Add formatter to console handler
         ch.setFormatter(formatter)
@@ -54,7 +40,7 @@ class Logger:
 
     def get_logger(self) -> logging.Logger:
         """
-        Returns the configured logger with colorized output.
+        Returns the configured logger.
         """
         return self.logger
 
