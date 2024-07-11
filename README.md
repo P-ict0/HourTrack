@@ -131,7 +131,7 @@ hourtrack info [--format <smart|full|short|hours>]
 | `hourtrack reset <project\|--all>` | Project name or `-a/--all` flag                       | None    | Reset a project's data. With option to reset all projects                                                                               |
 | `hourtrack delete <project\|--all>`| Project name or `-a/--all` flag                       | None    | Delete a project and all its data. With option to delete all projects                                                                     |
 | `hourtrack list <all\|active> [--format <smart\|full\|short\|hours>]` | format `smart` | None | List all/active projects.                                                                               |
-| `hourtrack info [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | None | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
+| `hourtrack info [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | format `smart` | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
 
 # 💻 Development
 
