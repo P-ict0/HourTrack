@@ -79,6 +79,9 @@ def parse_arguments():
         default="smart",
         help="Output format",
     )
+    status_parser.add_argument(
+        "-a", "--all", action="store_true", help="Stop all projects"
+    )
 
     # Reset command, with a required project argument
     reset_parser = subparsers.add_parser("reset", help="Reset timer for a project")
