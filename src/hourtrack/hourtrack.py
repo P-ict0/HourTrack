@@ -70,6 +70,10 @@ class HourTrack:
         elif self.args.command == "delete":
             project_manager.delete_project(apply_all)
 
+        elif self.args.command == "rename":
+            new_name = getattr(self.args, "new_name", None)
+            project_manager.rename_project(self.args.new_name)
+
         elif self.args.command == "list":
             if self.args.list_type == "all":
                 project_manager.list_all_projects()

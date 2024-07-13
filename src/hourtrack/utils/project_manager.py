@@ -203,6 +203,27 @@ class ProjectManager:
             self.save_data(self.data)
             print(f"Created project: {self.project}")
 
+    def rename_project(self, new_project: Optional[str]) -> None:
+        """
+        Rename a project
+
+        :param new_project: The new name of the project
+        """
+        self.exit_if_no_project()
+        if not new_project:
+            new_project = input(f"New name for project '{self.project}': ")
+        if self.project in self.data["projects"]:
+            if new_project in self.data["projects"]:
+                print(f"Error: Project {new_project} already exists")
+            else:
+                self.data["projects"][new_project] = self.data["projects"].pop(
+                    self.project
+                )
+                self.save_data(self.data)
+                print(f"Renamed project {self.project} to {new_project}")
+        else:
+            print(f"Error: Project {self.project} does not exist")
+
     def reset_project(self, apply_all: bool) -> None:
         """
         Reset the project, removing all session data and setting the total time to 0

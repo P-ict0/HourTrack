@@ -33,6 +33,11 @@ def parse_arguments():
     create_parser = subparsers.add_parser("create", help="Create a new project")
     create_parser.add_argument("project", help="The name of the project to create")
 
+    # Rename command
+    rename_parser = subparsers.add_parser("rename", help="Rename a project")
+    rename_parser.add_argument("project", help="The name of the project to rename")
+    rename_parser.add_argument("new_name", help="The new name for the project", nargs="?")
+
     # Start command, with a required project argument
     start_parser = subparsers.add_parser(
         "start", help="Start tracking time for a project"
