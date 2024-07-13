@@ -79,6 +79,12 @@ For help:
 hourtrack --help
 ```
 
+**(Optional) Create a project**:
+Create a project to start tracking time. (This is not necessary, as the project will be created when you start tracking time for it.)
+```bash
+hourtrack create <project>
+```
+
 **Start tracking**:
 Start tracking session for a project. If the project does not exist, it will be created.
 ```bash
@@ -126,6 +132,7 @@ hourtrack info [--format <smart|full|short|hours>]
 | Command                 | Requirement                          | Default | Description                                                                                             |
 |-------------------------|--------------------------------------|---------|---------------------------------------------------------------------------------------------------------|
 | `hourtrack --help`      | None                                 | None    | For help                                                                                                |
+| `hourtrack create <project>` | Project name                       | None    | Create a new empty project.                |
 | `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
 | `hourtrack stop <project\|--all>`  | Project name or `-a/--all` flag                       | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                              |
 | `hourtrack reset <project\|--all>` | Project name or `-a/--all` flag                       | None    | Reset a project's data. With option to reset all projects                                                                               |

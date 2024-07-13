@@ -29,6 +29,11 @@ class HourTrack:
         self.check_args()
 
     def check_args(self):
+
+        # If no command is provided, show the help message
+        if not hasattr(self.args, "command"):
+            self.args.command = "help"
+
         if (
             self.args.command == "info"
             and hasattr(self.args, "output")
@@ -53,6 +58,9 @@ class HourTrack:
         if self.args.command == "start":
             project_manager.start_project()
 
+        elif self.args.command == "create":
+            project_manager.create_project()
+
         elif self.args.command == "stop":
             project_manager.stop_project(apply_all)
 
@@ -69,7 +77,7 @@ class HourTrack:
                 project_manager.list_active_projects()
 
         elif self.args.command == "info":
-            output = getattr(self.args, "info", None)
+            output = getattr(self.args, "output", None)
             project_manager.project_status(output, apply_all)
 
 

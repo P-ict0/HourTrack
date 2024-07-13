@@ -24,14 +24,14 @@ def ask_yes_no(question: str) -> bool:
     :param question: The question to ask
     :return: True if the user answers yes, False otherwise
     """
-    answer = input(f"{question} [Y]es/[n]o: ").strip().lower()
-    if answer in ["y", "yes", ""]:
-        return True
-    elif answer in ["n", "no"]:
-        return False
-    else:
-        print("Invalid input, defaulting to 'yes'.")
-        return True
+    while True:
+        answer = input(f"{question} [Y]es/[n]o: ").strip().lower()
+        if answer in ["y", "yes", ""]:
+            return True
+        elif answer in ["n", "no"]:
+            return False
+        else:
+            print("Please enter 'yes', 'no', or leave blank for 'yes'.")
 
 
 #########################################################################
@@ -43,7 +43,7 @@ def format_time(seconds: int, mode: str) -> str:
 
     :param seconds: The number of seconds to format
     :param mode: The mode to use for formatting
-        - "smart": Display in the most appropriate units (e.g. 1h, 30m)
+        - "smart": Display in the most appropriate units (e.g. 1 hour, 30 minues)
         - "full": Display in full (e.g. 1 hour, 30 minutes, 15 seconds)
         - "short": Display in short (e.g. 1h 30m 15s)
         - "hours": Display only in hours (e.g. 1)
@@ -137,7 +137,10 @@ def format_time(seconds: int, mode: str) -> str:
 
     def format_hours() -> str:
         """
-        Format the time string in hours only
+        Format the time string in hours with one decimal place
+
+        Returns:
+        str: The formatted time string in hours
         """
         total_hours = (
             months * (30 * 24)
@@ -147,7 +150,7 @@ def format_time(seconds: int, mode: str) -> str:
             + minutes / 60
             + seconds / 3600
         )
-        return f"{int(total_hours)} hours"
+        return f"{round(total_hours, 1)} hours"
 
     if mode == "full":
         return format_full()
@@ -158,7 +161,8 @@ def format_time(seconds: int, mode: str) -> str:
     elif mode == "hours":
         return format_hours()
     else:
-        raise ValueError(f"Invalid format mode: {mode}")
+        print("Error: Invalid format: {mode}")
+        print("Valid formats: 'smart', 'full', 'short', 'hours'")
 
 
 def format_timestamp(timestamp: str) -> str:
@@ -175,6 +179,6 @@ def format_timestamp(timestamp: str) -> str:
     dt = datetime.fromisoformat(timestamp)
 
     # Format the datetime object to a human-readable string
-    human_readable = dt.strftime("%Y-%m-%d %H:%M:%S")
+    human_readable = dt.strftime("%d-%m-%Y %H:%M:%S")
 
     return human_readable

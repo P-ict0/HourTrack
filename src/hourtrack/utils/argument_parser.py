@@ -29,6 +29,10 @@ def parse_arguments():
     # Add subparsers for different commands
     subparsers = parser.add_subparsers(dest="command")
 
+    # Create command
+    create_parser = subparsers.add_parser("create", help="Create a new project")
+    create_parser.add_argument("project", help="The name of the project to create")
+
     # Start command, with a required project argument
     start_parser = subparsers.add_parser(
         "start", help="Start tracking time for a project"
@@ -54,6 +58,7 @@ def parse_arguments():
         help="List all projects or only active ones",
     )
     list_parser.add_argument(
+        "-f",
         "--format",
         choices=["smart", "full", "short", "hours"],
         default="smart",
@@ -74,6 +79,7 @@ def parse_arguments():
         help="Output destination",
     )
     status_parser.add_argument(
+        "-f",
         "--format",
         choices=["smart", "full", "short", "hours"],
         default="smart",

@@ -191,6 +191,18 @@ class ProjectManager:
                 time_formatted = format_time(total_time, self.format_mode)
                 print(f"  {project} (active): {time_formatted}")
 
+    def create_project(self) -> None:
+        """
+        Create a new project
+        """
+        self.exit_if_no_project()
+        if self.project in self.data["projects"]:
+            print(f"Error: Project {self.project} already exists")
+        else:
+            self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
+            self.save_data(self.data)
+            print(f"Created project: {self.project}")
+
     def reset_project(self, apply_all: bool) -> None:
         """
         Reset the project, removing all session data and setting the total time to 0
