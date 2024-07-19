@@ -37,7 +37,7 @@ def parse_arguments():
     # Rename command
     edit_parser = subparsers.add_parser("edit", help="Edit a project")
     edit_parser.add_argument("project", help="The name of the project to rename")
-    edit_parser.add_argument("--delete-session", type=str, help="Remove a session by its id", nargs="?")
+    edit_parser.add_argument("--delete-session", type=int, help="Remove a session by its id", nargs="?")
     edit_parser.add_argument("--add-session", type=int, help="Add an X hour(s) long session until now", nargs="?")
     edit_parser.add_argument("--rename", type=str, help="The new name for the project", nargs="?")
 
