@@ -32,17 +32,21 @@ class HourTrack:
 
         # If no command is provided, show the help message
         if not hasattr(self.args, "command"):
-            self.args.command = "help"
+            print("Error: No command provided")
+            sys.exit(1)
 
         if (
             self.args.command == "info"
             and hasattr(self.args, "output")
             and not hasattr(self.args, "project")
         ):
-            sys.stderr.write(
-                "Error: The --output argument requires the project argument\n"
-            )
+            print("Error: The --output argument requires the project argument\n")
             sys.exit(1)
+        
+        if self.args.command == "edit":
+            if hasattr(self.args, "rename") and not hasattr(self.args, "project"):
+                print("Error: The --rename argument requires the project argument\n")
+                sys.exit(1)
 
     def track(self):
         """
@@ -70,9 +74,20 @@ class HourTrack:
         elif self.args.command == "delete":
             project_manager.delete_project(apply_all)
 
-        elif self.args.command == "rename":
-            new_name = getattr(self.args, "new_name", None)
-            project_manager.rename_project(self.args.new_name)
+        elif self.args.command == "edit":
+            rename = getattr(self.args, "rename", None)
+            add_session_hours = getattr(self.args, "add_session", None)
+            remove_session_id = getattr(self.args, "delete_session", None)
+
+            if rename:
+                project_manager.rename_project(rename)
+            elif add_session_hours:
+                project_manager.add_session(add_session_hours)
+            elif remove_session_id:
+                project_manager.remove_session(remove_session_id)
+            else:
+                print("Error: No sufficient arguments provided for the edit command")
+                sys.exit(1)
 
         elif self.args.command == "list":
             if self.args.list_type == "all":

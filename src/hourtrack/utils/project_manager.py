@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from .helpers import ask_yes_no, format_time, format_timestamp
 from typing import Optional
 import sys
@@ -152,6 +152,46 @@ class ProjectManager:
         else:
             self.exit_if_no_project()
             stop_single_project(self.project)
+
+    def add_session(self, hours: int) -> None:
+        """
+        Add a session to the project, with a specified number of hours
+
+        :param hours: The number of hours to add to the session
+        """
+        self.exit_if_no_project()
+        if self.project in self.data["projects"]:
+            end_time = datetime.now()
+            start_time = end_time - timedelta(hours=hours)
+            
+            # Add a new session with the start and end time
+            self.data["projects"][self.project]["sessions"].append(
+                {"start": start_time.isoformat(), "end": end_time.isoformat(), "total_time": hours * 3600}
+            )
+            self.save_data(self.data)
+            print(f"Added session to project: {self.project}")
+        else:
+            print(f"Error: Project {self.project} does not exist")
+
+    def remove_session(self, session_id: int) -> None:
+        """
+        Remove a session from the project by its ID
+
+        :param session_id: The ID of the session to remove
+        """
+        self.exit_if_no_project()
+        if self.project in self.data["projects"]:
+            sessions = self.data["projects"][self.project]["sessions"]
+            if session_id < len(sessions):
+                confirm = ask_yes_no(f"Remove session {session_id} from project {self.project}?")
+                if confirm:
+                    del sessions[session_id]
+                    self.save_data(self.data)
+                    print(f"Removed session {session_id} from project: {self.project}")
+            else:
+                print(f"Error: Session {session_id} does not exist for project {self.project}")
+        else:
+            print(f"Error: Project {self.project} does not exist")
 
     def list_all_projects(self) -> None:
         """
@@ -321,7 +361,7 @@ class ProjectManager:
             status_output += f"Total time: {time_formatted}{active_warning}\n"
             status_output += f"Number of sessions: {num_sessions}\n\n"
             status_output += "Sessions:\n"
-            for session in details["sessions"]:
+            for id, session in enumerate(details["sessions"]):
                 start = format_timestamp(session["start"])
                 end = (
                     format_timestamp(session["end"])
@@ -334,7 +374,7 @@ class ProjectManager:
                     else "N/A"
                 )
                 status_output += (
-                    f"Start: {start}, End: {end}, Duration: {session_total_time}\n"
+                    f"Session {id}: Start: {start}, End: {end}, Duration: {session_total_time}\n"
                 )
 
             return status_output

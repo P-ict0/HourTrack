@@ -12,8 +12,9 @@ def parse_arguments():
     - stop <project>: Stop tracking time for a project
     - list all: List all projects (optionally with --format)
     - list active: List active projects (optionally with --format)
-    - status [<project>]: Show status of a project or current session (optionally with --format and --output)
+    - info [<project>]: Show status of a project or current session (optionally with --format and --output)
     - reset <project>: Reset timer for a project
+    - edit <project>: Edit a project (rename, change session info, delete session, etc...)
     - delete <project>: Delete a project
     Options:
     - --format: Output format for list, status, and output commands ("smart", "full", "short", "hours")
@@ -34,9 +35,11 @@ def parse_arguments():
     create_parser.add_argument("project", help="The name of the project to create")
 
     # Rename command
-    rename_parser = subparsers.add_parser("rename", help="Rename a project")
-    rename_parser.add_argument("project", help="The name of the project to rename")
-    rename_parser.add_argument("new_name", help="The new name for the project", nargs="?")
+    edit_parser = subparsers.add_parser("edit", help="Edit a project")
+    edit_parser.add_argument("project", help="The name of the project to rename")
+    edit_parser.add_argument("--delete-session", type=int, help="Remove a session by its id", nargs="?")
+    edit_parser.add_argument("--add-session", type=int, help="Add an X hour(s) long session until now", nargs="?")
+    edit_parser.add_argument("--rename", type=str, help="The new name for the project", nargs="?")
 
     # Start command, with a required project argument
     start_parser = subparsers.add_parser(
