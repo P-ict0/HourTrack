@@ -104,10 +104,20 @@ Reset a project's data. With option to reset all projects
 hourtrack reset <project|--all>
 ```
 
-**Rename project**:
+**Edit project**:
 Rename a project.
 ```bash
-hourtrack rename <oldProject> [<newProject>]
+hourtrack edit <project> --rename <new_name>
+```
+
+Add session with endtime now that lasted certain number of hours.
+```bash
+hourtrack edit <project> --add-session <hours>
+```
+
+Delete session by its ID. (You get the id by `hourtrack info <project>`)
+```bash
+hourtrack edit <project> --delete-session <id>
 ```
 
 **Delete project**:
@@ -142,7 +152,7 @@ hourtrack info [--format <smart|full|short|hours>]
 | `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
 | `hourtrack stop <project\|--all>`  | Project name or `-a/--all` flag                       | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                              |
 | `hourtrack reset <project\|--all>` | Project name or `-a/--all` flag                       | None    | Reset a project's data. With option to reset all projects                                                                               |
-| `hourtrack rename <oldProject> [<newProject>]` | Old project name                       | None    | Renames an already existing project                                                                               |
+| `hourtrack edit <project> <--rename <name>\|--add-session <hours>\|--delete-session <id>>` | One of `--rename`, `--add-session`, `--delete-session`                       | None    | Renames a project, adds a session or deletes a session                                                                               |
 | `hourtrack delete <project\|--all>`| Project name or `-a/--all` flag                       | None    | Delete a project and all its data. With option to delete all projects                                                                     |
 | `hourtrack list <all\|active> [--format <smart\|full\|short\|hours>]` | format `smart` | None | List all/active projects.                                                                               |
 | `hourtrack info [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | format `smart` | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
