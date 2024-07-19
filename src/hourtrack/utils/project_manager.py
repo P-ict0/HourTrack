@@ -94,6 +94,10 @@ class ProjectManager:
             if ask_yes_no(f"Project {self.project} does not exist. Create it?"):
                 print(f"Creating project: {self.project}")
                 self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
+        # Check if the project is already being tracked, to avoid starting a new session
+        elif self.data["projects"][self.project]["sessions"] and self.data["projects"][self.project]["sessions"][-1]["end"] is None:
+            print(f"Error: Project {self.project} is already being tracked")
+            return
 
         # Add a new session with the start time
         self.data["projects"][self.project]["sessions"].append(
