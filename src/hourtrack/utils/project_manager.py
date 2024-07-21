@@ -168,6 +168,10 @@ class ProjectManager:
             self.data["projects"][self.project]["sessions"].append(
                 {"start": start_time.isoformat(), "end": end_time.isoformat(), "total_time": hours * 3600}
             )
+
+            # Recalculate the total time for the project
+            self.data["projects"][self.project]["total_time"] += hours * 3600
+
             self.save_data(self.data)
             print(f"Added session to project: {self.project}")
         else:
