@@ -42,7 +42,7 @@ class HourTrack:
         ):
             print("Error: The --output argument requires the project argument\n")
             sys.exit(1)
-        
+
         if self.args.command == "edit":
             if hasattr(self.args, "rename") and not hasattr(self.args, "project"):
                 print("Error: The --rename argument requires the project argument\n")
@@ -62,7 +62,7 @@ class HourTrack:
         if self.args.command == "start":
             project_manager.start_project()
 
-        elif self.args.command == "create":
+        elif self.args.command == "init":
             project_manager.create_project()
 
         elif self.args.command == "stop":
@@ -86,7 +86,9 @@ class HourTrack:
             elif remove_session_id:
                 project_manager.remove_session(remove_session_id)
             else:
-                print("Error: No sufficient arguments provided for the edit command, see --help\n")
+                print(
+                    "Error: No sufficient arguments provided for the edit command, see --help\n"
+                )
                 sys.exit(1)
 
         elif self.args.command == "list":

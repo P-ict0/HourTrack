@@ -95,7 +95,10 @@ class ProjectManager:
                 print(f"Creating project: {self.project}")
                 self.data["projects"][self.project] = {"sessions": []}
         # Check if the project is already being tracked, to avoid starting a new session
-        elif self.data["projects"][self.project]["sessions"] and self.data["projects"][self.project]["sessions"][-1]["end"] is None:
+        elif (
+            self.data["projects"][self.project]["sessions"]
+            and self.data["projects"][self.project]["sessions"][-1]["end"] is None
+        ):
             print(f"Error: Project {self.project} is already being tracked")
             return
 
@@ -160,10 +163,14 @@ class ProjectManager:
         if self.project in self.data["projects"]:
             end_time = datetime.now()
             start_time = end_time - timedelta(hours=hours)
-            
+
             # Add a new session with the start and end time
             self.data["projects"][self.project]["sessions"].append(
-                {"start": start_time.isoformat(), "end": end_time.isoformat(), "total_time": hours * 3600}
+                {
+                    "start": start_time.isoformat(),
+                    "end": end_time.isoformat(),
+                    "total_time": hours * 3600,
+                }
             )
 
             self.save_data(self.data)
@@ -188,19 +195,27 @@ class ProjectManager:
         if self.project in self.data["projects"]:
             sessions = self.data["projects"][self.project]["sessions"]
             # Check if the session exists
-            if (zero_indexed_id < len(sessions) and zero_indexed_id >= 0):
-                confirm = ask_yes_no(f"Remove session {session_id} from project {self.project}?")
+            if zero_indexed_id < len(sessions) and zero_indexed_id >= 0:
+                confirm = ask_yes_no(
+                    f"Remove session {session_id} from project {self.project}?"
+                )
             # If the user wants to remove the last session
             elif zero_indexed_id == -1:
-                confirm = ask_yes_no(f"Remove the last session from project {self.project}?")
+                confirm = ask_yes_no(
+                    f"Remove the last session from project {self.project}?"
+                )
             else:
-                print(f"Error: Session {session_id} does not exist for project {self.project}, see 'info' command for session IDs")
+                print(
+                    f"Error: Session {session_id} does not exist for project {self.project}, see 'info' command for session IDs"
+                )
                 return
 
             if confirm:
                 del sessions[zero_indexed_id]
                 self.save_data(self.data)
-                session_message = "session {session_id}" if session_id != -1 else "last session"
+                session_message = (
+                    "session {session_id}" if session_id != -1 else "last session"
+                )
                 print(f"Removed {session_message} from project: {self.project}")
         else:
             print(f"Error: Project {self.project} does not exist")
@@ -253,14 +268,18 @@ class ProjectManager:
             time_formatted = format_time(total_time, self.format_mode)
             if self.is_project_active(project):
                 active_projects += 1
-                output_active_projects.append(f"  {project}: {time_formatted}  (active)")
+                output_active_projects.append(
+                    f"  {project}: {time_formatted}  (active)"
+                )
             else:
                 non_active_projects += 1
                 output_non_active_projects.append(f"  {project}: {time_formatted}")
-        
+
         # Print the output
         if not active:
-            print(f"Total projects: {active_projects + non_active_projects} (active: {active_projects}, non-active: {non_active_projects})")
+            print(
+                f"Total projects: {active_projects + non_active_projects} (active: {active_projects}, non-active: {non_active_projects})"
+            )
             for project in output_active_projects + output_non_active_projects:
                 print(project)
         else:
@@ -404,15 +423,20 @@ class ProjectManager:
                 session_total_time = (
                     # If the session is active, add active_session_warning and calculate the time until now, otherwise use the total_time
                     format_time(
-                        int((datetime.now() - datetime.fromisoformat(session["start"])).total_seconds())
-                        if session["end"] is None
-                        else session["total_time"],
+                        (
+                            int(
+                                (
+                                    datetime.now()
+                                    - datetime.fromisoformat(session["start"])
+                                ).total_seconds()
+                            )
+                            if session["end"] is None
+                            else session["total_time"]
+                        ),
                         self.format_mode,
                     )
                 )
-                status_output += (
-                    f"Session {id+1}: Start: {start}, End: {end}, Duration: {session_total_time}\n"
-                )
+                status_output += f"Session {id+1}: Start: {start}, End: {end}, Duration: {session_total_time}\n"
 
             return status_output
 

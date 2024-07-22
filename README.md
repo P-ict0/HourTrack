@@ -1,5 +1,3 @@
-<div align = center>
-  
 # ⌛ HourTrack
 
 <br>
@@ -20,6 +18,15 @@
 - [✨ Features](#-features)
 - [📦 Installation](#-installation)
 - [📲 Usage](#-usage)
+  - [Help!:](#help)
+  - [(Optional) Initialize a project:](#optional-initialize-a-project)
+  - [Start tracking:](#start-tracking)
+  - [Stop tracking:](#stop-tracking)
+  - [Reset project:](#reset-project)
+  - [Edit project:](#edit-project)
+  - [Delete project:](#delete-project)
+  - [List projects:](#list-projects)
+  - [Project Info:](#project-info)
 - [⚙ Options](#-options)
 - [💻 Development](#-development)
 - [👥 Contributing](#-contributing)
@@ -62,7 +69,7 @@ From [PyPI][PyPiLink]
 ```bash
 pipx install hourtrack
 ```
-_`pipx` is optional but recommended, you can use `pip` instead._
+_`pipx` is recommended, but you can use `pip` instead._
 
 **Optional installation alternative**
 
@@ -74,73 +81,86 @@ pipx install .  # You can also use `pip`
 
 # 📲 Usage
 
-For help:
+## Help!:
+
 ```bash
 hourtrack --help
 ```
 
-**(Optional) Create a project**:
+## (Optional) Initialize a project:
+
 Create a project to start tracking time. (This is not necessary, as the project will be created when you start tracking time for it.)
 ```bash
-hourtrack create <project>
+hourtrack init <project>
 ```
 
-**Start tracking**:
+## Start tracking:
+
 Start tracking session for a project. If the project does not exist, it will be created.
 ```bash
 hourtrack start <project>
 ```
 
-**Stop tracking**:
+## Stop tracking:
+
 Stop current session for a project, saving the time spent. With option to delete all projects.
 ```bash
-hourtrack stop <project|--all>
+hourtrack stop <project> # Stop tracking for a project
+hourtrack stop --all     # Stop tracking for all projects
 ```
 
-**Reset project**:
-Reset a project's data. With option to reset all projects
+## Reset project:
+
+Delete all sessions for a project or all projects and reset the timer to 0, but don't delete
 
 ```bash
-hourtrack reset <project|--all>
+hourtrack reset <project> # Reset a project
+hourtrack reset --all     # Reset all projects
 ```
 
-**Edit project**:
-Rename a project.
+## Edit project:
+
 ```bash
-hourtrack edit <project> --rename <new_name>
+hourtrack edit <project> --rename <new_name>    # Rename a project
+
+hourtrack edit <project> --add-session <hours>  # Add a session to a project 
+                                                # ending now that <hours> hours ago.
+
+hourtrack edit <project> --delete-session <id>  # Delete session by its id (use `info` to get the id)
+hourtrack edit <project> --delete-session -1    # Delete last session
 ```
 
-Add session with endtime now that lasted certain number of hours.
-```bash
-hourtrack edit <project> --add-session <hours>
-```
+## Delete project:
 
-Delete session by its ID. (You get the id by `hourtrack info <project>`)
-```bash
-hourtrack edit <project> --delete-session <id>
-# Delete last session
-hourtrack edit <project> --delete-session -1
-```
-
-**Delete project**:
 Delete a project and all its data. With option to delete all projects.
 
 ```bash
-hourtrack delete <project|--all>
+hourtrack delete <project> # Delete a project
+hourtrack delete --all     # Delete all projects
 ```
 
-**List projects**:
+## List projects:
+
 List all/active projects.
 
+Available formats: `smart`, `full`, `short`, `hours`.
+Note: If not specified, `smart` format is the default format.
+
 ```bash
-hourtrack list <all|active> [--format <smart|full|short|hours>]
+hourtrack list all [-f <format>]      # List all projects
+hourtrack list active [-f <format>]   # List active projects
 ```
 
-**Project Info**:
-Show the status of a specific project. With option to output to a file.
+## Project Info:
+
+Show the status of a specific project or of all projects. With option to output to a file.
+
+Available formats: `smart`, `full`, `short`, `hours`.
+Note: If not specified, `smart` format is the default format.
 ```bash
-# Project status
-hourtrack info <project> [--format <smart|full|short|hours>] [-o <outputPath>]
+hourtrack info <project> [-f <format>]                      # Show project info
+hourtrack info --all [-f <format>]                          # Show current active session info
+hourtrack info <project|-all> -o <outputPath> [-f <format>] # Output to a file
 ```
 
 # ⚙ Options
@@ -148,14 +168,14 @@ hourtrack info <project> [--format <smart|full|short|hours>] [-o <outputPath>]
 | Command                 | Requirement                          | Default | Description                                                                                             |
 |-------------------------|--------------------------------------|---------|---------------------------------------------------------------------------------------------------------|
 | `hourtrack --help`      | None                                 | None    | For help                                                                                                |
-| `hourtrack create <project>` | Project name                       | None    | Create a new empty project.                |
+| `hourtrack init <project>` | Project name                       | None    | Create a new empty project.                |
 | `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
 | `hourtrack stop <project\|--all>`  | Project name or `-a/--all` flag                       | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                              |
 | `hourtrack reset <project\|--all>` | Project name or `-a/--all` flag                       | None    | Reset a project's data. With option to reset all projects                                                                               |
 | `hourtrack edit <project> <--rename <name>\|--add-session <hours>\|--delete-session <id|-1>>` | One of `--rename`, `--add-session`, `--delete-session`                       | None    | Renames a project, adds a session or deletes a session                                                                               |
 | `hourtrack delete <project\|--all>`| Project name or `-a/--all` flag                       | None    | Delete a project and all its data. With option to delete all projects                                                                     |
-| `hourtrack list <all\|active> [--format <smart\|full\|short\|hours>]` | format `smart` | None | List all/active projects.                                                                               |
-| `hourtrack info [<project>] [--format <smart\|full\|short\|hours>] [-o <outputPath>]` | format `smart` | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
+| `hourtrack list <all\|active> [-f <smart\|full\|short\|hours>]` | format `smart` | None | List all/active projects.                                                                               |
+| `hourtrack info [<project>] [-f <smart\|full\|short\|hours>] [-o <outputPath>]` | format `smart` | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
 
 # 💻 Development
 
@@ -165,6 +185,9 @@ cd HourTrack
 python -m venv venv
 pip install -r requirements.txt
 source venv/bin/activate # Windows: .\venv\Scripts\activate.ps1
+
+# Note: You probably will need to remove the line from `utils/argument_parser.py`: from importlib.metadata import version
+# And also remove the `version` option from the parser (below in the file).
 
 # Run the script
 python src/hourtrack.py --help
