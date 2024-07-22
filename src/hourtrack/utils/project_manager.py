@@ -187,18 +187,21 @@ class ProjectManager:
         self.exit_if_no_project()
         if self.project in self.data["projects"]:
             sessions = self.data["projects"][self.project]["sessions"]
+            # Check if the session exists
             if (zero_indexed_id < len(sessions) and zero_indexed_id >= 0):
                 confirm = ask_yes_no(f"Remove session {session_id} from project {self.project}?")
+            # If the user wants to remove the last session
             elif zero_indexed_id == -1:
                 confirm = ask_yes_no(f"Remove the last session from project {self.project}?")
-            
+            else:
+                print(f"Error: Session {session_id} does not exist for project {self.project}, see 'info' command for session IDs")
+                return
+
             if confirm:
                 del sessions[zero_indexed_id]
                 self.save_data(self.data)
                 session_message = "session {session_id}" if session_id != -1 else "last session"
                 print(f"Removed {session_message} from project: {self.project}")
-            else:
-                print(f"Error: Session {session_id} does not exist for project {self.project}, see 'info' command for session IDs")
         else:
             print(f"Error: Project {self.project} does not exist")
 

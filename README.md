@@ -137,12 +137,10 @@ hourtrack list <all|active> [--format <smart|full|short|hours>]
 ```
 
 **Project Info**:
-Show the status of a specific project or show current active session. With option to output to a file.
+Show the status of a specific project. With option to output to a file.
 ```bash
 # Project status
 hourtrack info <project> [--format <smart|full|short|hours>] [-o <outputPath>]
-# Active session
-hourtrack info [--format <smart|full|short|hours>]
 ```
 
 # ⚙ Options
