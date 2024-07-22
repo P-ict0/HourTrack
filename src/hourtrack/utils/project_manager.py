@@ -81,7 +81,7 @@ class ProjectManager:
 
     def exit_if_no_project(self) -> None:
         if not self.project:
-            print("Project name is required")
+            print("Error: Project name is required")
             sys.exit(1)
 
     def start_project(self) -> None:
@@ -93,7 +93,7 @@ class ProjectManager:
             # If the project does not exist, create it
             if ask_yes_no(f"Project {self.project} does not exist. Create it?"):
                 print(f"Creating project: {self.project}")
-                self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
+                self.data["projects"][self.project] = {"sessions": []}
         # Check if the project is already being tracked, to avoid starting a new session
         elif self.data["projects"][self.project]["sessions"] and self.data["projects"][self.project]["sessions"][-1]["end"] is None:
             print(f"Error: Project {self.project} is already being tracked")
@@ -129,9 +129,6 @@ class ProjectManager:
                     end_time = datetime.fromisoformat(sessions[-1]["end"])
                     session_total_time = int((end_time - start_time).total_seconds())
                     sessions[-1]["total_time"] = session_total_time
-
-                    # Update the project's total time
-                    self.data["projects"][project]["total_time"] += session_total_time
 
                     self.save_data(self.data)
                     print(f"Stopped tracking project: {project}")
@@ -169,9 +166,6 @@ class ProjectManager:
                 {"start": start_time.isoformat(), "end": end_time.isoformat(), "total_time": hours * 3600}
             )
 
-            # Recalculate the total time for the project
-            self.data["projects"][self.project]["total_time"] += hours * 3600
-
             self.save_data(self.data)
             print(f"Added session to project: {self.project}")
         else:
@@ -183,61 +177,93 @@ class ProjectManager:
 
         :param session_id: The ID of the session to remove
         """
+        # User input is 1-indexed, convert to 0-indexed
+        zero_indexed_id = session_id - 1
+
+        # If user input is -1, remove the last session
+        if session_id == -1:
+            zero_indexed_id = -1
+
         self.exit_if_no_project()
         if self.project in self.data["projects"]:
             sessions = self.data["projects"][self.project]["sessions"]
-            if session_id < len(sessions):
+            if (zero_indexed_id < len(sessions) and zero_indexed_id >= 0):
                 confirm = ask_yes_no(f"Remove session {session_id} from project {self.project}?")
-                if confirm:
-                    del sessions[session_id]
-                    self.save_data(self.data)
-                    print(f"Removed session {session_id} from project: {self.project}")
+            elif zero_indexed_id == -1:
+                confirm = ask_yes_no(f"Remove the last session from project {self.project}?")
+            
+            if confirm:
+                del sessions[zero_indexed_id]
+                self.save_data(self.data)
+                session_message = "session {session_id}" if session_id != -1 else "last session"
+                print(f"Removed {session_message} from project: {self.project}")
             else:
-                print(f"Error: Session {session_id} does not exist for project {self.project}")
+                print(f"Error: Session {session_id} does not exist for project {self.project}, see 'info' command for session IDs")
         else:
             print(f"Error: Project {self.project} does not exist")
 
-    def list_all_projects(self) -> None:
+    def calculate_total_time(self, project: str) -> int:
+        """
+        Calculate the total time for the project
+
+        :param project: The name of the project
+
+        :return: The total time for the project
+        """
+        total_time = 0
+        for session in self.data["projects"][project]["sessions"]:
+            if session["end"]:
+                total_time += session["total_time"]
+            else:
+                start_time = datetime.fromisoformat(session["start"])
+                total_time += int((datetime.now() - start_time).total_seconds())
+        return total_time
+
+    def is_project_active(self, project: str) -> bool:
+        """
+        Check if the project is currently being tracked
+
+        :param project: The name of the project
+
+        :return: Whether the project is active
+        """
+        if project in self.data["projects"]:
+            project_data = self.data["projects"][project]
+            sessions = project_data["sessions"]
+            return sessions and sessions[-1]["end"] is None
+        else:
+            print(f"Error: Project {project} does not exist")
+
+    def list_projects(self, active: bool = False) -> None:
         """
         List all projects and their total times
         """
-        # Iterate over the projects and print the total time
-        for project, details in self.data["projects"].items():
-            total_time = details["total_time"]
-            # Check if the project is currently being tracked
-            if details["sessions"] and details["sessions"][-1]["end"] is None:
-                current_session_start = datetime.fromisoformat(
-                    details["sessions"][-1]["start"]
-                )
-                current_session_time = int(
-                    (datetime.now() - current_session_start).total_seconds()
-                )
-                total_time += current_session_time
-                time_formatted = format_time(total_time, self.format_mode)
-                print(f"  {project}: {time_formatted}  (active)")
-                # Print the total time for the project
-            else:
-                time_formatted = format_time(total_time, self.format_mode)
-                print(f"  {project}: {time_formatted}")
+        # Initialize counters for active and non-active projects
+        active_projects = 0
+        non_active_projects = 0
+        output_non_active_projects = []
+        output_active_projects = []
 
-    def list_active_projects(self) -> None:
-        """
-        List all projects that are currently being tracked
-        """
-        # Iterate over the projects and print the total time
-        for project, details in self.data["projects"].items():
-            if details["sessions"] and details["sessions"][-1]["end"] is None:
-                total_time = details["total_time"]
-                current_session_start = datetime.fromisoformat(
-                    details["sessions"][-1]["start"]
-                )
-                # Calculate the current session time
-                current_session_time = int(
-                    (datetime.now() - current_session_start).total_seconds()
-                )
-                total_time += current_session_time
-                time_formatted = format_time(total_time, self.format_mode)
-                print(f"  {project} (active): {time_formatted}")
+        # Loop through all projects
+        for project in self.data["projects"].keys():
+            total_time = self.calculate_total_time(project)
+            time_formatted = format_time(total_time, self.format_mode)
+            if self.is_project_active(project):
+                active_projects += 1
+                output_active_projects.append(f"  {project}: {time_formatted}  (active)")
+            else:
+                non_active_projects += 1
+                output_non_active_projects.append(f"  {project}: {time_formatted}")
+        
+        # Print the output
+        if not active:
+            print(f"Total projects: {active_projects + non_active_projects} (active: {active_projects}, non-active: {non_active_projects})")
+            for project in output_active_projects + output_non_active_projects:
+                print(project)
+        else:
+            print(f"Number of active projects: {active_projects}")
+            for project in output_active_projects:
+                print(project)
 
     def create_project(self) -> None:
         """
@@ -247,7 +273,7 @@ class ProjectManager:
         if self.project in self.data["projects"]:
             print(f"Error: Project {self.project} already exists")
         else:
-            self.data["projects"][self.project] = {"total_time": 0, "sessions": []}
+            self.data["projects"][self.project] = {"sessions": []}
             self.save_data(self.data)
             print(f"Created project: {self.project}")
 
@@ -286,7 +312,7 @@ class ProjectManager:
                     ask_yes_no(f"Reset project {project}?") if not apply_all else True
                 )
                 if ask_confirmation:
-                    self.data["projects"][project] = {"total_time": 0, "sessions": []}
+                    self.data["projects"][project] = {"sessions": []}
                     self.save_data(self.data)
                     print(f"Reset project {project}")
             else:
@@ -313,7 +339,7 @@ class ProjectManager:
         def delete_single_project(project: str) -> None:
             if project in self.data["projects"]:
                 ask_confirmation = (
-                    ask_yes_no(f"Reset project {project}?") if not apply_all else True
+                    ask_yes_no(f"Delete project {project}?") if not apply_all else True
                 )
                 if ask_confirmation:
                     del self.data["projects"][project]
@@ -342,30 +368,30 @@ class ProjectManager:
         :param output_to_file: Path to the file to output the status to
         """
 
-        def output_project_status(project: str, details: dict) -> str:
-            total_time = details["total_time"]
-            num_sessions = len(details["sessions"])
+        def output_project_status(project: str) -> str:
+            """
+            Output the status of a single project
 
-            is_active = details["sessions"] and details["sessions"][-1]["end"] is None
+            :param project: The name of the project
+
+            :return: The status output
+            """
+            total_time = self.calculate_total_time(project)
+            num_sessions = len(self.data["projects"][project]["sessions"])
+
+            is_active = self.is_project_active(project)
             if is_active:
-                current_session_start = datetime.fromisoformat(
-                    details["sessions"][-1]["start"]
-                )
-                current_session_time = int(
-                    (datetime.now() - current_session_start).total_seconds()
-                )
-                total_time += current_session_time
-                active_warning = " (active)"
+                active_project_warning = " (active)"
             else:
-                active_warning = ""
+                active_project_warning = ""
 
             time_formatted = format_time(total_time, self.format_mode)
 
             status_output = f"Project name: {project}\n"
-            status_output += f"Total time: {time_formatted}{active_warning}\n"
+            status_output += f"Total time: {time_formatted}{active_project_warning}\n"
             status_output += f"Number of sessions: {num_sessions}\n\n"
             status_output += "Sessions:\n"
-            for id, session in enumerate(details["sessions"]):
+            for id, session in enumerate(self.data["projects"][project]["sessions"]):
                 start = format_timestamp(session["start"])
                 end = (
                     format_timestamp(session["end"])
@@ -373,20 +399,26 @@ class ProjectManager:
                     else "Active"
                 )
                 session_total_time = (
-                    format_time(session["total_time"], self.format_mode)
-                    if session["total_time"]
-                    else "N/A"
+                    # If the session is active, add active_session_warning and calculate the time until now, otherwise use the total_time
+                    format_time(
+                        int((datetime.now() - datetime.fromisoformat(session["start"])).total_seconds())
+                        if session["end"] is None
+                        else session["total_time"],
+                        self.format_mode,
+                    )
                 )
                 status_output += (
-                    f"Session {id}: Start: {start}, End: {end}, Duration: {session_total_time}\n"
+                    f"Session {id+1}: Start: {start}, End: {end}, Duration: {session_total_time}\n"
                 )
 
             return status_output
 
         if apply_all:
-            all_status_output = ""
-            for project, details in self.data["projects"].items():
-                all_status_output += output_project_status(project, details) + "\n"
+            all_status_output = "-" * 40 + "\n"
+            for project in list(
+                self.data["projects"].keys()
+            ):  # Use list to avoid runtime dictionary modification issues
+                all_status_output += output_project_status(project) + "\n"
                 all_status_output += "-" * 40 + "\n"
 
             if output_to_file:
@@ -398,9 +430,7 @@ class ProjectManager:
         else:
             if self.project:
                 if self.project in self.data["projects"]:
-                    project_status_output = output_project_status(
-                        self.project, self.data["projects"][self.project]
-                    )
+                    project_status_output = output_project_status(self.project)
                     if output_to_file:
                         with open(output_to_file, "w") as f:
                             f.write(project_status_output)
@@ -409,30 +439,3 @@ class ProjectManager:
                         print(project_status_output)
                 else:
                     print(f"Error: Project '{self.project}' does not exist")
-            else:
-                # Check if there are any active projects
-                active_projects = [
-                    (proj, details)
-                    for proj, details in self.data["projects"].items()
-                    if details["sessions"] and details["sessions"][-1]["end"] is None
-                ]
-
-                if active_projects:
-                    for proj, details in active_projects:
-                        # Get the last session
-                        last_session = details["sessions"][-1]
-                        # Calculate the current session time
-                        start_time = datetime.fromisoformat(last_session["start"])
-                        current_time = datetime.now()
-                        current_session_time = int(
-                            (current_time - start_time).total_seconds()
-                        )
-                        current_session_time_formatted = format_time(
-                            current_session_time, self.format_mode
-                        )
-                        print(f"Active project: {proj}")
-                        print(
-                            f"Current session total time: {current_session_time_formatted}"
-                        )
-                else:
-                    print("There are no active projects")

@@ -86,14 +86,12 @@ class HourTrack:
             elif remove_session_id:
                 project_manager.remove_session(remove_session_id)
             else:
-                print("Error: No sufficient arguments provided for the edit command")
+                print("Error: No sufficient arguments provided for the edit command, see --help\n")
                 sys.exit(1)
 
         elif self.args.command == "list":
-            if self.args.list_type == "all":
-                project_manager.list_all_projects()
-            elif self.args.list_type == "active":
-                project_manager.list_active_projects()
+            active = True if self.args.list_type == "active" else False
+            project_manager.list_projects(active)
 
         elif self.args.command == "info":
             output = getattr(self.args, "output", None)

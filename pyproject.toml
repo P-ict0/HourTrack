@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "hourtrack"
-version = "1.5.2"
+version = "1.6.0"
 description = "Python program that tracks total time spent on projects and saves sessions. It supports multiple projects."
 readme = "README.md"
 requires-python = ">=3.10"
