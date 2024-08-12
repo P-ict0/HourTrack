@@ -1,5 +1,6 @@
 import platform
 from datetime import datetime
+from typing import Optional
 
 
 #########################################################################
@@ -70,17 +71,17 @@ def format_time(seconds: int, mode: str) -> str:
         """
         parts = []
         if months > 0:
-            parts.append(f"{months} month{'s' if months > 1 else ''}")
+            parts.append(f"{months} month{check_plural(months)}")
         if weeks > 0:
-            parts.append(f"{weeks} week{'s' if weeks > 1 else ''}")
+            parts.append(f"{weeks} week{check_plural(weeks)}")
         if days > 0:
-            parts.append(f"{days} day{'s' if days > 1 else ''}")
+            parts.append(f"{days} day{check_plural(days)}")
         if hours > 0:
-            parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+            parts.append(f"{hours} hour{check_plural(hours)}")
         if minutes > 0:
-            parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+            parts.append(f"{minutes} minute{check_plural(minutes)}")
         if seconds > 0 or not parts:
-            parts.append(f"{seconds} second{'s' if seconds > 1 else ''}")
+            parts.append(f"{seconds} second{check_plural(seconds)}")
         return ", ".join(parts)
 
     def format_short() -> str:
@@ -102,38 +103,48 @@ def format_time(seconds: int, mode: str) -> str:
             parts.append(f"{seconds}s")
         return " ".join(parts)
 
+    def check_plural(value: int) -> Optional[str]:
+        """
+        Returns 's' if value is not equal to 1
+
+        :param value: Value to check
+
+        Returns: 's' or None
+        """
+        return "s" if value != 1 else ""
+
     def format_smart() -> str:
         """
         Smartly format the time string based on the largest unit available
         """
         if months > 0:
-            parts = [f"{months} month{'s' if months > 1 else ''}"]
+            parts = [f"{months} month{check_plural(months)}"]
             if weeks > 0:
-                parts.append(f"{weeks} week{'s' if weeks > 1 else ''}")
+                parts.append(f"{weeks} week{check_plural(weeks)}")
             if days > 0:
-                parts.append(f"{days} day{'s' if days > 1 else ''}")
+                parts.append(f"{days} day{check_plural(days)}")
             if hours > 0:
-                parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+                parts.append(f"{hours} hour{check_plural(hours)}")
             return ", ".join(parts)
         elif weeks > 0:
-            parts = [f"{weeks} week{'s' if weeks > 1 else ''}"]
+            parts = [f"{weeks} week{check_plural(weeks)}"]
             if days > 0:
-                parts.append(f"{days} day{'s' if days > 1 else ''}")
+                parts.append(f"{days} day{check_plural(days)}")
             if hours > 0:
-                parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+                parts.append(f"{hours} hour{check_plural(hours)}")
             return ", ".join(parts)
         elif days > 0:
-            parts = [f"{days} day{'s' if days > 1 else ''}"]
+            parts = [f"{days} day{check_plural(days)}"]
             if hours > 0:
-                parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+                parts.append(f"{hours} hour{check_plural(hours)}")
             if minutes > 0:
-                parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+                parts.append(f"{minutes} minute{check_plural(minutes)}")
             return ", ".join(parts)
         elif hours > 0:
-            return f"{hours} hour{'s' if hours > 1 else ''}, {minutes} minute{'s' if minutes > 1 else ''}"
+            return f"{hours} hour{check_plural(hours)}, {minutes} minute{check_plural(minutes)}"
         elif minutes > 0:
-            return f"{minutes} minute{'s' if minutes > 1 else ''}, {seconds} second{'s' if seconds > 1 else ''}"
-        return f"{seconds} second{'s' if seconds > 1 else ''}"
+            return f"{minutes} minute{check_plural(minutes)}, {seconds} second{check_plural(seconds)}"
+        return f"{seconds} second{check_plural(seconds)}"
 
     def format_hours() -> str:
         """
