@@ -19,14 +19,14 @@
 - [📦 Installation](#-installation)
 - [📲 Usage](#-usage)
   - [Help!:](#help)
-  - [(Optional) Initialize a project:](#optional-initialize-a-project)
-  - [Start tracking:](#start-tracking)
-  - [Stop tracking:](#stop-tracking)
-  - [Reset project:](#reset-project)
-  - [Edit project:](#edit-project)
-  - [Delete project:](#delete-project)
-  - [List projects:](#list-projects)
-  - [Project Info:](#project-info)
+  - [(Optional) Initialize a project](#optional-initialize-a-project)
+  - [Start tracking](#start-tracking)
+  - [Stop tracking](#stop-tracking)
+  - [Reset project](#reset-project)
+  - [Edit project](#edit-project)
+  - [Delete project](#delete-project)
+  - [List projects](#list-projects)
+  - [Project Info](#project-info)
 - [⚙ Options](#-options)
 - [💻 Development](#-development)
 - [👥 Contributing](#-contributing)
@@ -81,27 +81,27 @@ pipx install .  # You can also use `pip`
 
 # 📲 Usage
 
-## Help!:
+## Help!
 
 ```bash
 hourtrack --help
 ```
 
-## (Optional) Initialize a project:
+## (Optional) Initialize a project
 
 Create a project to start tracking time. (This is not necessary, as the project will be created when you start tracking time for it.)
 ```bash
 hourtrack init <project>
 ```
 
-## Start tracking:
+## Start tracking
 
 Start tracking session for a project. If the project does not exist, it will be created.
 ```bash
 hourtrack start <project>
 ```
 
-## Stop tracking:
+## Stop tracking
 
 Stop current session for a project, saving the time spent. With option to delete all projects.
 ```bash
@@ -109,7 +109,7 @@ hourtrack stop <project> # Stop tracking for a project
 hourtrack stop --all     # Stop tracking for all projects
 ```
 
-## Reset project:
+## Reset project
 
 Delete all sessions for a project or all projects and reset the timer to 0, but don't delete
 
@@ -118,7 +118,7 @@ hourtrack reset <project> # Reset a project
 hourtrack reset --all     # Reset all projects
 ```
 
-## Edit project:
+## Edit project
 
 ```bash
 hourtrack edit <project> --rename <new_name>    # Rename a project
@@ -130,7 +130,7 @@ hourtrack edit <project> --delete-session <id>  # Delete session by its id (use 
 hourtrack edit <project> --delete-session -1    # Delete last session
 ```
 
-## Delete project:
+## Delete project
 
 Delete a project and all its data. With option to delete all projects.
 
@@ -139,7 +139,7 @@ hourtrack delete <project> # Delete a project
 hourtrack delete --all     # Delete all projects
 ```
 
-## List projects:
+## List projects
 
 List all/active projects.
 
@@ -151,7 +151,7 @@ hourtrack list all [-f <format>]      # List all projects
 hourtrack list active [-f <format>]   # List active projects
 ```
 
-## Project Info:
+## Project Info
 
 Show the status of a specific project or of all projects. With option to output to a file.
 
