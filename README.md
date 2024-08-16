@@ -18,7 +18,7 @@
 - [✨ Features](#-features)
 - [📦 Installation](#-installation)
 - [📲 Usage](#-usage)
-  - [Help!:](#help)
+  - [Help!](#help)
   - [(Optional) Initialize a project](#optional-initialize-a-project)
   - [Start tracking](#start-tracking)
   - [Stop tracking](#stop-tracking)
@@ -85,6 +85,7 @@ pipx install .  # You can also use `pip`
 
 ```bash
 hourtrack --help
+hourtrack <command> --help
 ```
 
 ## (Optional) Initialize a project
@@ -126,7 +127,7 @@ hourtrack edit <project> --rename <new_name>    # Rename a project
 hourtrack edit <project> --add-session <hours>  # Add a session to a project 
                                                 # ending now that <hours> hours ago.
 
-hourtrack edit <project> --delete-session <id>  # Delete session by its id (use `info` to get the id)
+hourtrack edit <project> --delete-session <id>  # Delete session by its id (use `info` command to get the id)
 hourtrack edit <project> --delete-session -1    # Delete last session
 ```
 
@@ -172,10 +173,10 @@ hourtrack info <project|-all> -o <outputPath> [-f <format>] # Output to a file
 | `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
 | `hourtrack stop <project\|--all>`  | Project name or `-a/--all` flag                       | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                              |
 | `hourtrack reset <project\|--all>` | Project name or `-a/--all` flag                       | None    | Reset a project's data. With option to reset all projects                                                                               |
-| `hourtrack edit <project> <--rename <name>\|--add-session <hours>\|--delete-session <id|-1>>` | One of `--rename`, `--add-session`, `--delete-session`                       | None    | Renames a project, adds a session or deletes a session                                                                               |
+| `hourtrack edit <project> <--rename <name>\|--add-session <hours>\|--delete-session <id\|-1>>` | One of `--rename`, `--add-session`, `--delete-session`                       | None    | Renames a project, adds a session or deletes a session                                                                               |
 | `hourtrack delete <project\|--all>`| Project name or `-a/--all` flag                       | None    | Delete a project and all its data. With option to delete all projects                                                                     |
-| `hourtrack list <all\|active> [-f <smart\|full\|short\|hours>]` | format `smart` | None | List all/active projects.                                                                               |
-| `hourtrack info [<project>] [-f <smart\|full\|short\|hours>] [-o <outputPath>]` | format `smart` | None | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
+| `hourtrack list <all\|active> [-f <smart\|full\|short\|hours>]` | None | format `smart` | List all/active projects.                                                                               |
+| `hourtrack info [<project>] [-f <smart\|full\|short\|hours>] [-o <outputPath>]` | None | format `smart` | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
 
 # 💻 Development
 
