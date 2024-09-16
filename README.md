@@ -52,6 +52,8 @@ pipx install hourtrack
 hourtrack start myProject
 ```
 
+_`pipx` is recommended, but you can use `pip` instead._
+
 # ✨ Features
 
 - **Supports multiple projects**: Track time for multiple projects.
