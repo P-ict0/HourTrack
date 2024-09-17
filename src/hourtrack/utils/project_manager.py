@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime, timedelta
-from .helpers import ask_yes_no, format_time, format_timestamp
+from .helpers import ask_yes_no, format_time, format_timestamp, write_to_file
 from typing import Optional
 import sys
 
@@ -194,11 +194,11 @@ class ProjectManager:
 
         # Stop tracking all projects
         if apply_all:
-            ask_yes_no("Stop tracking all projects?")
-            for project in list(
-                self.data["projects"].keys()
-            ):  # Use list to avoid runtime dictionary modification issues
-                stop_single_project(project)
+            if ask_yes_no("Stop tracking all projects?"):
+                for project in list(
+                    self.data["projects"].keys()
+                ):  # Use list to avoid runtime dictionary modification issues
+                    stop_single_project(project)
         else:
             self.exit_if_no_project()
             stop_single_project(self.project)
@@ -278,10 +278,10 @@ class ProjectManager:
         """
         self.exit_if_no_project()
         if self.project in self.data["projects"]:
-            ask_yes_no(f"Edit goal for project {self.project} to {hours} hours?")
-            self.data["projects"][self.project]["hours_goal"] = hours
-            self.save_data(self.data)
-            print(f"Set goal for project {self.project} to {hours} hours")
+            if ask_yes_no(f"Edit goal for project {self.project} to {hours} hours?"):
+                self.data["projects"][self.project]["hours_goal"] = hours
+                self.save_data(self.data)
+                print(f"Set goal for project {self.project} to {hours} hours")
         else:
             print(f"Error: Project {self.project} does not exist")
 
@@ -420,11 +420,11 @@ class ProjectManager:
 
         # Reset all projects
         if apply_all:
-            ask_yes_no("Reset all projects?")
-            for project in list(
-                self.data["projects"].keys()
-            ):  # Use list to avoid runtime dictionary modification issues
-                reset_single_project(project)
+            if ask_yes_no("Reset all projects?"):
+                for project in list(
+                    self.data["projects"].keys()
+                ):  # Use list to avoid runtime dictionary modification issues
+                    reset_single_project(project)
         else:
             self.exit_if_no_project()
             reset_single_project(self.project)
@@ -449,11 +449,11 @@ class ProjectManager:
                 print(f"Error: Project {project} does not exist")
 
         if apply_all:
-            ask_yes_no("Delete all projects?")
-            for project in list(
-                self.data["projects"].keys()
-            ):  # Use list to avoid runtime dictionary modification issues
-                delete_single_project(project)
+            if ask_yes_no("Delete all projects?"):
+                for project in list(
+                    self.data["projects"].keys()
+                ):  # Use list to avoid runtime dictionary modification issues
+                    delete_single_project(project)
         else:
             self.exit_if_no_project()
             delete_single_project(self.project)
@@ -529,8 +529,16 @@ class ProjectManager:
                 all_status_output += "-" * 40 + "\n"
 
             if output_to_file:
-                with open(output_to_file, "w") as f:
-                    f.write(all_status_output)
+                if not output_to_file.endswith(".txt"):
+                    output_to_file += ".txt"
+                if os.path.exists(os.path.dirname(output_to_file)):
+                    if ask_yes_no(f"{output_to_file} already exists. Overwrite?"):
+                        write_to_file(output_to_file, all_status_output)
+                        print(f"Outputted status of all projects to {output_to_file}")
+                    else:
+                        sys.exit(0)
+
+                write_to_file(output_to_file, all_status_output)
                 print(f"Outputted status of all projects to {output_to_file}")
             else:
                 print(all_status_output)
@@ -539,8 +547,9 @@ class ProjectManager:
                 if self.project in self.data["projects"]:
                     project_status_output = output_project_status(self.project)
                     if output_to_file:
-                        with open(output_to_file, "w") as f:
-                            f.write(project_status_output)
+                        if not output_to_file.endswith(".txt"):
+                            output_to_file += ".txt"
+                        write_to_file(output_to_file, project_status_output)
                         print(f"Outputted project {self.project} to {output_to_file}")
                     else:
                         print(project_status_output)
