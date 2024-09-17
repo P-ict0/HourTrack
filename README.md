@@ -10,8 +10,6 @@
 
 <br>
 
-</div>
-
 # Contents
 - [📖 Description](#-description)
 - [🚀 Quick start](#-quick-start)
@@ -44,6 +42,7 @@ This script is going to help you track:
 - Total time spent on different projects
 - Work sessions information
 - Time spent on each session
+- Set a goal for each project
 
 # 🚀 Quick start
 
@@ -57,6 +56,7 @@ _`pipx` is recommended, but you can use `pip` instead._
 # ✨ Features
 
 - **Supports multiple projects**: Track time for multiple projects.
+- **Set goals**: Set an hour goal for each project.
 - **Start/Stop tracking**: Start and stop tracking time for a project.
 - **List projects**: List all projects being tracked.
 - **Delete project**: Delete a project and all its data.
@@ -90,11 +90,13 @@ hourtrack --help
 hourtrack <command> --help
 ```
 
-## (Optional) Initialize a project
+## Initialize a project
 
-Create a project to start tracking time. (This is not necessary, as the project will be created when you start tracking time for it.)
+Create a project to start tracking time. You can also initialize a project with a goal.
+
 ```bash
-hourtrack init <project>
+hourtrack init <project>                  # Create a new empty project
+hourtrack init <project> --goal <hours>   # Create a new project with a goal
 ```
 
 ## Start tracking
@@ -126,8 +128,10 @@ hourtrack reset --all     # Reset all projects
 ```bash
 hourtrack edit <project> --rename <new_name>    # Rename a project
 
+hourtrack edit <project> --goal <hours>         # Set/edit an hour goal for a project (or remove it with 0)
+
 hourtrack edit <project> --add-session <hours>  # Add a session to a project 
-                                                # ending now that <hours> hours ago.
+                                                # ending now that started <hours> hours ago.
 
 hourtrack edit <project> --delete-session <id>  # Delete session by its id (use `info` command to get the id)
 hourtrack edit <project> --delete-session -1    # Delete last session
@@ -168,17 +172,17 @@ hourtrack info <project|-all> -o <outputPath> [-f <format>] # Output to a file
 
 # ⚙ Options
 
-| Command                 | Requirement                          | Default | Description                                                                                             |
-|-------------------------|--------------------------------------|---------|---------------------------------------------------------------------------------------------------------|
-| `hourtrack --help`      | None                                 | None    | For help                                                                                                |
-| `hourtrack init <project>` | Project name                       | None    | Create a new empty project.                |
-| `hourtrack start <project>` | Project name                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                |
-| `hourtrack stop <project\|--all>`  | Project name or `-a/--all` flag                       | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                              |
-| `hourtrack reset <project\|--all>` | Project name or `-a/--all` flag                       | None    | Reset a project's data. With option to reset all projects                                                                               |
-| `hourtrack edit <project> <--rename <name>\|--add-session <hours>\|--delete-session <id\|-1>>` | One of `--rename`, `--add-session`, `--delete-session`                       | None    | Renames a project, adds a session or deletes a session                                                                               |
-| `hourtrack delete <project\|--all>`| Project name or `-a/--all` flag                       | None    | Delete a project and all its data. With option to delete all projects                                                                     |
-| `hourtrack list <all\|active> [-f <smart\|full\|short\|hours>]` | None | format `smart` | List all/active projects.                                                                               |
-| `hourtrack info [<project>] [-f <smart\|full\|short\|hours>] [-o <outputPath>]` | None | format `smart` | Show the info of a specific project or show current active session if project is not specified. With option to output to a file.   |
+| Command                                                                                                           | Requirement                                                        | Default | Description                                                                                                                      |
+|-------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------|
+| `hourtrack --help`                                                                                                | None                                                               | None    | For help                                                                                                                         |
+| `hourtrack init <project>`                                                                                        | Project name                                                       | None    | Create a new empty project.                                                                                                      |
+| `hourtrack start <project>`                                                                                       | Project name                                                       | None    | Start tracking session for a project. If the project does not exist, it will be created.                                         |
+| `hourtrack stop <project\|--all>`                                                                                 | Project name or `-a/--all` flag                                    | None    | Stop current session for a project, saving the time spent. With option to stop all projects                                      |
+| `hourtrack reset <project\|--all>`                                                                                | Project name or `-a/--all` flag                                    | None    | Reset a project's data. With option to reset all projects                                                                        |
+| `hourtrack edit <project> <--rename <name>\|--add-session <hours>\|--delete-session <id\|-1>\|-g/--goal <hours>>` | One of `--rename`, `--add-session`, `--delete-session`, `-g/--goal` | None    | Renames a project, edits hour goal, adds a session or deletes a session                                                          |
+| `hourtrack delete <project\|--all>`                                                                               | Project name or `-a/--all` flag                                    | None    | Delete a project and all its data. With option to delete all projects                                                            |
+| `hourtrack list <all\|active> [-f <smart\|full\|short\|hours>]`                                                   | None                                                               | format `smart` | List all/active projects.                                                                                                        |
+| `hourtrack info [<project>] [-f <smart\|full\|short\|hours>] [-o <outputPath>]`                                   | None                                                               | format `smart` | Show the info of a specific project or show current active session if project is not specified. With option to output to a file. |
 
 # 💻 Development
 
