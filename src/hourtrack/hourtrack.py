@@ -54,11 +54,10 @@ class HourTrack:
         # If the project name is not provided, use None
         project = getattr(self.args, "project", None)
         format = getattr(self.args, "format", "smart")
-        goal = getattr(self.args, "goal", None)
-        goal_progress = getattr(self.args, "progress", "default")
+        hours_goal = getattr(self.args, "goal", 0)
         apply_all = getattr(self.args, "all", False)
 
-        project_manager = ProjectManager(project, DATA_FILE, format)
+        project_manager = ProjectManager(project, DATA_FILE, format, hours_goal)
 
         if self.args.command == "start":
             project_manager.start_project()
@@ -86,6 +85,8 @@ class HourTrack:
                 project_manager.add_session(add_session_hours)
             elif remove_session_id:
                 project_manager.remove_session(remove_session_id)
+            elif hours_goal != 0:
+                project_manager.set_goal(hours_goal)
             else:
                 print(
                     "Error: No sufficient arguments provided for the edit command, see --help\n"

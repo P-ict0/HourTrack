@@ -14,6 +14,7 @@ class ProjectManager:
     ```
     "projects": {
             "project1": {
+                    "hours_goal": 10,
                     "sessions": [
                         {"start": "2023-01-01 10:00:00", "end": "2023-01-01 12:00:00", total_time: 7200},
                         {"start": "2023-01-02 09:00:00", "end": "2023-01-02 11:00:00", total_time: 7200},
@@ -26,6 +27,7 @@ class ProjectManager:
     ```
     "projects": {
             "project1": {
+                    "hours_goal": 10,
                     "sessions": [
                         {"start": "2023-01-01 10:00:00", "end": "2023-01-01 12:00:00", total_time: 7200},
                         {"start": "2023-01-02 09:00:00", "end": "None", total_time: None},
@@ -46,10 +48,27 @@ class ProjectManager:
             }
     }
     ```
+
+    Project with no hour goal:
+    ```
+    "projects": {
+            "project1": {
+                    "hours_goal": None,
+                    "sessions": [
+                        {"start": "2023-01-01 10:00:00", "end": "2023-01-01 12:00:00", total_time: 7200},
+                        {"start": "2023-01-02 09:00:00", "end": "2023-01-02 11:00:00", total_time: 7200},
+                    ]
+            }
+    }
+    ```
     """
 
     def __init__(
-        self, project: Optional[str], data_file: str, format_mode: str
+        self,
+        project: Optional[str],
+        data_file: str,
+        format_mode: str,
+        hours_goal: Optional[int],
     ) -> None:
         """
         Initialize the ProjectManager
@@ -57,10 +76,13 @@ class ProjectManager:
         :param project: The name of the project
         :param data_file: The path to the JSON file storing data
         :param format_mode: The mode to use for formatting time, one of "smart", "full", "short", "hours"
+        :param hours_goal: The goal (hours) for the project
         """
+
         self.data_file = data_file  # path to the JSON file storing data
         self.project = project  # name of the project or None
-        self.format_mode = format_mode
+        self.format_mode = format_mode  # mode to use for formatting time
+        self.hours_goal = hours_goal  # goal (hours) for the project
         self.init_file()  # initialize the JSON file
         self.data = self.load_data()  # pre-load the data from the JSON file
 
@@ -97,6 +119,21 @@ class ProjectManager:
             print("Error: Project name is required")
             sys.exit(1)
 
+    def create_project(self) -> None:
+        """
+        Create a new project
+        """
+        self.exit_if_no_project()
+        if self.project in self.data["projects"]:
+            print(f"Error: Project {self.project} already exists")
+        else:
+            self.data["projects"][self.project] = {
+                "hours_goal": self.hours_goal,
+                "sessions": [],
+            }
+            self.save_data(self.data)
+            print(f"Created project: {self.project}")
+
     def start_project(self) -> None:
         """
         Start tracking the project, saving the start time
@@ -106,7 +143,7 @@ class ProjectManager:
             # If the project does not exist, create it
             if ask_yes_no(f"Project {self.project} does not exist. Create it?"):
                 print(f"Creating project: {self.project}")
-                self.data["projects"][self.project] = {"sessions": []}
+                self.data["projects"][self.project] = {"hours_goal": 0, "sessions": []}
         # Check if the project is already being tracked, to avoid starting a new session
         elif (
             self.data["projects"][self.project]["sessions"]
@@ -208,7 +245,7 @@ class ProjectManager:
         if self.project in self.data["projects"]:
             sessions = self.data["projects"][self.project]["sessions"]
             # Check if the session exists
-            if zero_indexed_id < len(sessions) and zero_indexed_id >= 0:
+            if len(sessions) > zero_indexed_id >= 0:
                 confirm = ask_yes_no(
                     f"Remove session {session_id} from project {self.project}?"
                 )
@@ -233,6 +270,21 @@ class ProjectManager:
         else:
             print(f"Error: Project {self.project} does not exist")
 
+    def set_goal(self, hours: int) -> None:
+        """
+        Set the goal for the project in hours
+
+        :param hours: The goal for the project in hours
+        """
+        self.exit_if_no_project()
+        if self.project in self.data["projects"]:
+            ask_yes_no(f"Edit goal for project {self.project} to {hours} hours?")
+            self.data["projects"][self.project]["hours_goal"] = hours
+            self.save_data(self.data)
+            print(f"Set goal for project {self.project} to {hours} hours")
+        else:
+            print(f"Error: Project {self.project} does not exist")
+
     def calculate_total_time(self, project: str) -> int:
         """
         Calculate the total time for the project
@@ -249,6 +301,28 @@ class ProjectManager:
                 start_time = datetime.fromisoformat(session["start"])
                 total_time += int((datetime.now() - start_time).total_seconds())
         return total_time
+
+    def calculate_progress_string(self, project: str) -> Optional[str]:
+        """
+        Calculate the progress percentage and fraction for the project
+        Example: 50.0% (5/10 hours)
+        When more than 100% is reached, the percentage will remain 100
+        Example: 100.0% (13/10 hours)
+
+        :param project: The name of the project
+
+        :return: The string representation of the progress percentage
+        """
+        if self.data["projects"][project]["hours_goal"] == 0:
+            return None
+
+        total_time = self.calculate_total_time(project)
+        hours_goal = self.data["projects"][project]["hours_goal"]
+        progress_percentage = min((total_time / (hours_goal * 3600)) * 100, 100)
+        progress_string = (
+            f"{progress_percentage:.1f}% ({int(total_time / 3600)}/{hours_goal} hours)"
+        )
+        return progress_string
 
     def is_project_active(self, project: str) -> bool:
         """
@@ -267,7 +341,7 @@ class ProjectManager:
 
     def list_projects(self, active: bool = False) -> None:
         """
-        List all projects and their total times
+        List all projects and their total times, also display progress percentage if a goal is set
         """
         # Initialize counters for active and non-active projects
         active_projects = 0
@@ -278,15 +352,18 @@ class ProjectManager:
         # Loop through all projects
         for project in self.data["projects"].keys():
             total_time = self.calculate_total_time(project)
+            progress = self.calculate_progress_string(project)
             time_formatted = format_time(total_time, self.format_mode)
             if self.is_project_active(project):
                 active_projects += 1
                 output_active_projects.append(
-                    f"  {project}: {time_formatted}  (active)"
+                    f"  {project}: {time_formatted} (active) | Progress: {progress}"
                 )
             else:
                 non_active_projects += 1
-                output_non_active_projects.append(f"  {project}: {time_formatted}")
+                output_non_active_projects.append(
+                    f"  {project}: {time_formatted} | Progress: {progress}"
+                )
 
         # Print the output
         if not active:
@@ -299,18 +376,6 @@ class ProjectManager:
             print(f"Number of active projects: {active_projects}")
             for project in output_active_projects:
                 print(project)
-
-    def create_project(self) -> None:
-        """
-        Create a new project
-        """
-        self.exit_if_no_project()
-        if self.project in self.data["projects"]:
-            print(f"Error: Project {self.project} already exists")
-        else:
-            self.data["projects"][self.project] = {"sessions": []}
-            self.save_data(self.data)
-            print(f"Created project: {self.project}")
 
     def rename_project(self, new_project: Optional[str]) -> None:
         """
@@ -413,6 +478,7 @@ class ProjectManager:
             """
             total_time = self.calculate_total_time(project)
             num_sessions = len(self.data["projects"][project]["sessions"])
+            progress = self.calculate_progress_string(project)
 
             is_active = self.is_project_active(project)
             if is_active:
@@ -424,6 +490,7 @@ class ProjectManager:
 
             status_output = f"Project name: {project}\n"
             status_output += f"Total time: {time_formatted}{active_project_warning}\n"
+            status_output += f"Progress: {progress}\n"
             status_output += f"Number of sessions: {num_sessions}\n\n"
             status_output += "Sessions:\n"
             for id, session in enumerate(self.data["projects"][project]["sessions"]):
