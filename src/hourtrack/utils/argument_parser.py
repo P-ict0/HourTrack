@@ -17,9 +17,12 @@ def parse_arguments():
     - edit <project>: Edit a project (rename, change session info, delete session, etc...)
     - delete <project>: Delete a project
     Options:
-    - --format: Output format for list, status, and output commands ("smart", "full", "short", "hours")
+    - -f/--format: Output format for list, status, and output commands ("smart", "full", "short", "hours")
                     Default is "smart"
-    - --output: Output destination for status command
+    - -o/--output: Output destination for status command
+    - -a/--all: Apply to all projects
+    - -g/--goal: Set an hour goal for a project
+    - -p/--progress: Show progress of projects with goals ("none", "default", "bar", "percent")
     - -h, --help: Show help message
     - -V, --version: Show version
 
@@ -38,6 +41,7 @@ def parse_arguments():
     create_parser = subparsers.add_parser(
         "init", help="Create a new empty project but don't start tracking time"
     )
+    create_parser.add_argument("-g", "--goal", type=int, help="Set an hour goal for a project")
     create_parser.add_argument("project", help="The name of the project to create")
 
     # Edit command
@@ -59,13 +63,20 @@ def parse_arguments():
         nargs="?",
     )
     edit_parser.add_argument(
+        "-g",
+        "--goal",
+        type=int,
+        help="Add or edit a goal for a project in hours, or remove it by setting it to 0",
+        nargs="?",
+    )
+    edit_parser.add_argument(
         "--rename", type=str, help="Rename a project with a new name", nargs="?"
     )
 
     # Start command, with a required project argument
     start_parser = subparsers.add_parser(
         "start",
-        help="Start tracking time for a project, creating it if it doesn't exist",
+        help="Start tracking time for a project, quick-creating it if it doesn't exist",
     )
     start_parser.add_argument(
         "project", help="The name of the project to start tracking"
@@ -96,6 +107,13 @@ def parse_arguments():
         default="smart",
         help="Output format, default is 'smart'",
     )
+    list_parser.add_argument(
+        "-p",
+        "--progress",
+        choices=["none", "default", "bar", "percent"],
+        default="default",
+        help="Show progress of projects with goals",
+    )
 
     # Info command
     status_parser = subparsers.add_parser(
@@ -119,6 +137,13 @@ def parse_arguments():
         choices=["smart", "full", "short", "hours"],
         default="smart",
         help="Output format, default is 'smart'",
+    )
+    status_parser.add_argument(
+        "-p",
+        "--progress",
+        choices=["none", "default", "bar", "percent"],
+        default="default",
+        help="Show progress of projects with goals",
     )
     status_parser.add_argument(
         "-a", "--all", action="store_true", help="Show info for all projects"

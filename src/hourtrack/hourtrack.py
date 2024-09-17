@@ -10,7 +10,6 @@ sys.path.append(directory.parent)
 from utils.argument_parser import parse_arguments
 from utils.config import DATA_FILE
 from utils.project_manager import ProjectManager
-from utils.project_manager import ProjectManager
 import sys
 
 
@@ -55,6 +54,8 @@ class HourTrack:
         # If the project name is not provided, use None
         project = getattr(self.args, "project", None)
         format = getattr(self.args, "format", "smart")
+        goal = getattr(self.args, "goal", None)
+        goal_progress = getattr(self.args, "progress", "default")
         apply_all = getattr(self.args, "all", False)
 
         project_manager = ProjectManager(project, DATA_FILE, format)

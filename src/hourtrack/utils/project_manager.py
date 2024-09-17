@@ -33,6 +33,19 @@ class ProjectManager:
                 }
             }
     ```
+
+    Project with hour goal:
+    ```
+    "projects": {
+            "project1": {
+                    "hours_goal": 10,
+                    "sessions": [
+                        {"start": "2023-01-01 10:00:00", "end": "2023-01-01 12:00:00", total_time: 7200},
+                        {"start": "2023-01-02 09:00:00", "end": "2023-01-02 11:00:00", total_time: 7200},
+                    ]
+            }
+    }
+    ```
     """
 
     def __init__(
