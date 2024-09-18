@@ -42,10 +42,10 @@ class HourTrack:
         """
         Main function for the HourTrack application
         """
-        # If the project name is not provided, use None
         project = getattr(self.args, "project", None)
         format = getattr(self.args, "format", "smart")
         hours_goal = getattr(self.args, "goal", 0)
+        hours_goal = int(hours_goal) if hours_goal else 0
         apply_all = getattr(self.args, "all", False)
 
         project_manager = ProjectManager(project, DATA_FILE, format, hours_goal)
