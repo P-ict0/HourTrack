@@ -17,7 +17,7 @@
 - [📦 Installation](#-installation)
 - [📲 Usage](#-usage)
   - [Help!](#help)
-  - [(Optional) Initialize a project](#optional-initialize-a-project)
+  - [Initialize a project](#initialize-a-project)
   - [Start tracking](#start-tracking)
   - [Stop tracking](#stop-tracking)
   - [Reset project](#reset-project)
@@ -47,7 +47,7 @@ This script is going to help you track:
 # 🚀 Quick start
 
 ```bash
-pipx install hourtrack
+pip install hourtrack
 hourtrack start myProject
 ```
 
@@ -69,16 +69,15 @@ _`pipx` is recommended, but you can use `pip` instead._
 From [PyPI][PyPiLink]
 
 ```bash
-pipx install hourtrack
+pip install hourtrack
 ```
-_`pipx` is recommended, but you can use `pip` instead._
 
 **Optional installation alternative**
 
 ```bash
 git clone https://github.com/P-ict0/HourTrack.git
 cd HourTrack
-pipx install .  # You can also use `pip`
+pip install .
 ```
 
 # 📲 Usage
@@ -189,9 +188,6 @@ hourtrack info <project|-all> -o <outputPath> [-f <format>] # Output to a file
 ```bash
 git clone https://github.com/P-ict0/HourTrack.git
 cd HourTrack
-python -m venv venv
-pip install -r requirements.txt
-source venv/bin/activate # Windows: .\venv\Scripts\activate.ps1
 
 # Note: You probably will need to remove the line from `utils/argument_parser.py`: from importlib.metadata import version
 # And also remove the `version` option from the parser (below in the file).

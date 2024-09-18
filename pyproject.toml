@@ -25,9 +25,6 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
 ]
-dependencies = [
-    "path==16.14.0"
-]
 
 [project.urls]
 "Homepage" = "https://github.com/P-ict0/HourTrack.git"
