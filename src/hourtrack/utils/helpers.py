@@ -16,6 +16,20 @@ def is_windows() -> bool:
 
 
 #########################################################################
+######################## Write to file ##################################
+#########################################################################
+def write_to_file(filepath: str, data: str):
+    """
+    Write the output to a file
+
+    :param filepath: The file path to write the output to
+    :param data: The output to write to the file
+    """
+    with open(filepath, "w") as f:
+        f.write(data)
+
+
+#########################################################################
 ######################## User input #####################################
 #########################################################################
 def ask_yes_no(question: str) -> bool:

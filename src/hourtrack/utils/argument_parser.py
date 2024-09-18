@@ -17,9 +17,11 @@ def parse_arguments():
     - edit <project>: Edit a project (rename, change session info, delete session, etc...)
     - delete <project>: Delete a project
     Options:
-    - --format: Output format for list, status, and output commands ("smart", "full", "short", "hours")
+    - -f/--format: Output format for list, status, and output commands ("smart", "full", "short", "hours")
                     Default is "smart"
-    - --output: Output destination for status command
+    - -o/--output: Output destination for status command
+    - -a/--all: Apply to all projects
+    - -g/--goal: Set an hour goal for a project
     - -h, --help: Show help message
     - -V, --version: Show version
 
@@ -37,6 +39,9 @@ def parse_arguments():
     # Create command
     create_parser = subparsers.add_parser(
         "init", help="Create a new empty project but don't start tracking time"
+    )
+    create_parser.add_argument(
+        "-g", "--goal", type=int, help="Set an hour goal for a project"
     )
     create_parser.add_argument("project", help="The name of the project to create")
 
@@ -57,6 +62,12 @@ def parse_arguments():
         type=int,
         help="Add a session to a project ending now that started X hours ago.",
         nargs="?",
+    )
+    edit_parser.add_argument(
+        "-g",
+        "--goal",
+        type=int,
+        help="Add or edit a goal for a project in hours, or remove it by setting it to 0",
     )
     edit_parser.add_argument(
         "--rename", type=str, help="Rename a project with a new name", nargs="?"
@@ -87,7 +98,7 @@ def parse_arguments():
     list_parser.add_argument(
         "list_type",
         choices=["all", "active"],
-        help="List all projects or only active ones",
+        help="List all, or active projects",
     )
     list_parser.add_argument(
         "-f",
