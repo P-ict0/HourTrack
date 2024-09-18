@@ -68,7 +68,6 @@ def parse_arguments():
         "--goal",
         type=int,
         help="Add or edit a goal for a project in hours, or remove it by setting it to 0",
-        nargs="?",
     )
     edit_parser.add_argument(
         "--rename", type=str, help="Rename a project with a new name", nargs="?"
