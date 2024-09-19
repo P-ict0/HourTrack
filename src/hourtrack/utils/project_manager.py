@@ -278,10 +278,18 @@ class ProjectManager:
         """
         self.exit_if_no_project()
         if self.project in self.data["projects"]:
-            if ask_yes_no(f"Edit goal for project {self.project} to {hours} hours?"):
+            if hours == 0:
+                question_string = f"Remove goal for project {self.project}?"
+                answer_string = f"Removed goal for project {self.project}"
+            else:
+                question_string = (
+                    f"Edit goal for project {self.project} to {hours} hours?"
+                )
+                answer_string = f"Set goal for project {self.project} to {hours} hours"
+            if ask_yes_no(question_string):
                 self.data["projects"][self.project]["hours_goal"] = hours
                 self.save_data(self.data)
-                print(f"Set goal for project {self.project} to {hours} hours")
+                print(answer_string)
         else:
             print(f"Error: Project {self.project} does not exist")
 

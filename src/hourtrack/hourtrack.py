@@ -76,7 +76,7 @@ class HourTrack:
                 project_manager.add_session(add_session_hours)
             elif remove_session_id:
                 project_manager.remove_session(remove_session_id)
-            elif hours_goal != 0:
+            elif isinstance(hours_goal, int):
                 project_manager.set_goal(hours_goal)
             else:
                 print(
