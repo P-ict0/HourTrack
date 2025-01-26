@@ -27,11 +27,6 @@ jobs:
       run: |
         echo "VERSION=v$(cat pyproject.toml | grep 'version = ' | sed 's/version = //g' | sed 's/"//g')" >> $GITHUB_ENV
 
-    - name: Get latest commit message
-      id: get-commit-message
-      run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
-
-
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
