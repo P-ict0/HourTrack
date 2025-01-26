@@ -24,7 +24,6 @@ def parse_arguments():
     - -g/--goal: Set an hour goal for a project
     - -h, --help: Show help message
     - -V, --version: Show version
-
     Returns: argparse.Namespace: The parsed arguments.
     """
     parser = argparse.ArgumentParser(

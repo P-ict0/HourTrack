@@ -264,7 +264,7 @@ class ProjectManager:
                 del sessions[zero_indexed_id]
                 self.save_data(self.data)
                 session_message = (
-                    "session {session_id}" if session_id != -1 else "last session"
+                    f"session {session_id}" if session_id != -1 else "last session"
                 )
                 print(f"Removed {session_message} from project: {self.project}")
         else:
