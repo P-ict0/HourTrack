@@ -78,6 +78,12 @@ cd HourTrack
 pip install .
 ```
 
+You can now run Hourtrack with one of these 2 commands:
+```bash
+hourtrack
+ht
+```
+
 # 📲 Usage
 
 ## Help!
