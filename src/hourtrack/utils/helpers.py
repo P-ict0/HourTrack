@@ -8,17 +8,17 @@ from typing import Optional
 #########################################################################
 def is_windows() -> bool:
     """
-    Check the OS and send the notification
+    Checks for the OS
 
     :return: True if the OS is Windows, False otherwise
     """
-    return True if platform.system() == "Windows" else False
+    return platform.system() == "Windows"
 
 
 #########################################################################
 ######################## Write to file ##################################
 #########################################################################
-def write_to_file(filepath: str, data: str):
+def write_to_file(filepath: str, data: str) -> None:
     """
     Write the output to a file
 
@@ -58,7 +58,7 @@ def format_time(seconds: int, mode: str) -> str:
 
     :param seconds: The number of seconds to format
     :param mode: The mode to use for formatting
-        - "smart": Display in the most appropriate units (e.g. 1 hour, 30 minues)
+        - "smart": Display in the most appropriate units (e.g. 1 hour, 30 minutes)
         - "full": Display in full (e.g. 1 hour, 30 minutes, 15 seconds)
         - "short": Display in short (e.g. 1h 30m 15s)
         - "hours": Display only in hours (e.g. 1)
@@ -186,7 +186,7 @@ def format_time(seconds: int, mode: str) -> str:
     elif mode == "hours":
         return format_hours()
     else:
-        print("Error: Invalid format: {mode}")
+        print(f"Error: Invalid format: {mode}")
         print("Valid formats: 'smart', 'full', 'short', 'hours'")
 
 
